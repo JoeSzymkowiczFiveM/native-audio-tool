@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html data-theme="night">
+  <head>
+    <meta charset="UTF-8">
+    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+    <title>FiveM Native Audio Tool</title>
+    <link href="./output.css" rel="stylesheet">
+  </head>
+  <body>
+
+    <form action="" method="post" id="audioform">
+      <div class="grid grid-flow-row auto-rows-max place-items-center">
+        <div class="mt-5">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="files"> MP3 Files</label>
+            <input id="files" type="file" accept=".MP3" multiple class="file-input file-input-bordered file-input-primary file-input-sm w-full max-w-xs" />
+        </div>
+
+        <div class="mt-5" id="selectedFiles">
+            
+        </div>
+
+        <div class="mt-5">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="bitrate">Bitrate</label>
+            <input id="bitrate" type="number" placeholder="Bitrate" class="input input-bordered input-primary input-sm w-full max-w-xs" />
+        </div>
+
+        <div class="mt-5">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="trackid">Track ID</label>
+            <input id="trackid" type="number" placeholder="Track ID" class="input input-bordered input-primary input-sm w-full max-w-xs" />
+        </div>
+
+        <div class="mt-5">
+            <button id="createbtn" class="btn" action="sumbit">Create</button>
+        </div>
+    </div>
+    </form>
+    
+  </body>
+</html>
