@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow  } = require('electron')
 const path = require('path')
 
 const CreateWindow = () => {
@@ -6,15 +6,16 @@ const CreateWindow = () => {
     width: 500,
     height: 700,
     autoHideMenuBar: true,
+    icon: path.join(__dirname, 'img/sound.png'),
     webPreferences: {
         preload: path.join(__dirname, 'preload.js'),
         nodeIntegration: true,
+        devTools: false,
     },
   })
 
   win.loadFile('./src/index.html')
 }
-
 
 // App Events
 app.whenReady().then(() => {
