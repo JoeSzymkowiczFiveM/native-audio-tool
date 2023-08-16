@@ -20,6 +20,7 @@ pids
 *.seed
 *.pid.lock
 
+/data
 *.mp3
 *.awc
 *.wav
