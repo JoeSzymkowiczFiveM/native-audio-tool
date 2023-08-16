@@ -25,12 +25,13 @@ function constructFileArray(fileList, initialTrackId) {
         fileData.tracks = tracks
         fileData.trackid = newTrackId
         fileData.filename = file.name
+        fileData.path = file.path
         trackData[file.name] = fileData
         newTrackId++
     })
 }
 
-async function constructWav(track, filename, channel, sampleRate) {
+async function constructWav(track, filePath, channel, sampleRate) {
     return new Promise((resolve,reject)=>{
         if (!fs.existsSync(track)){
             fs.mkdirSync(track);
@@ -38,7 +39,7 @@ async function constructWav(track, filename, channel, sampleRate) {
 
         const side = channel === 'left' ? '0.0.0' : '0.0.1'
         ffmpeg()
-        .input(filename)
+        .input(filePath)
         .inputFormat('mp3')
         .outputOption('-map_channel ' + side)
         .audioChannels(1)
@@ -79,7 +80,7 @@ async function main(fileList, sampleRate, initialTrackId) {
     for (const [filename, fileData] of Object.entries(trackData)) {
         const tracks = fileData['tracks']
         for (const [side, track] of Object.entries(tracks)) {
-            await constructWav(fileData.track, filename, side, sampleRate)
+            await constructWav(fileData.track, fileData.path, side, sampleRate)
             await getWavData(fileData.track, filename, side)
         }
         await constructAWCXML(fileData)

@@ -10,56 +10,95 @@ window.addEventListener('DOMContentLoaded', () => {
     replaceText(`${dependency}-version`, process.versions[dependency])
   }
 
-  FileListener()
+  formListener()
 })
 
-function serialize (data) {
-	let obj = {};
-	for (let [key, value] of data) {
-		if (obj[key] !== undefined) {
-			if (!Array.isArray(obj[key])) {
-				obj[key] = [obj[key]];
-			}
-			obj[key].push(value);
-		} else {
-			obj[key] = value;
-		}
-	}
-	return obj;
+function removeFileFromFileList(index) {
+  const dt = new DataTransfer()
+  const input = document.forms["audioform"]["files"].files
+  // const { files } = input
+  const files = input
+
+  console.log(input)
+  
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i]
+    if (index !== i)
+      dt.items.add(file) // here you exclude the file. thus removing it.
+  }
+  
+  input.files = dt.files // Assign the updates list
+}
+
+function toast(text, style = "error", time = 2000) {
+  var toastbox = document.getElementById("toastbox")
+  var id =  Math.random()
+  toastbox.innerHTML += `
+    <div id="alert-${id}" class="alert alert-${style}">
+      <span>${text}</span>
+    </div>`
+
+    setTimeout(() => {
+      var elem = document.getElementById(`alert-${id}`)
+      elem.parentNode.removeChild(elem)
+    }, time)
 }
 
 
-function FileListener() {
+function formListener() {
   let form = document.getElementById('audioform')
-  const createBtn = document.getElementById("createbtn")
   const selectedFiles = document.getElementById("selectedFiles")
   const mp3Files = document.getElementById("files")
 
+  // File Selection
   mp3Files.addEventListener("change", (event) => {
     Object.entries(event.target.files).forEach(([key, file]) => {
       selectedFiles.innerHTML +=
       `<div id='selectedFile${key}' class='py-1 select-none'>
-        <div class='selected-file border-solid rounded border-2 border-sky-500'>
+        <div class='border-solid rounded border-2 border-sky-700 hover:border-sky-200 cursor-pointer'>
           <div class='px-2'>
             ${file.name}
           </div>
         </div>
-      </div>`
+      </div>`;
+    })
 
+    Object.entries(event.target.files).forEach(([key, file]) => {
       document.getElementById(`selectedFile${key}`).addEventListener("click", (e) => {
-        console.log(file.name)
-        event.target.files[key].value = null;
-        e.target.remove()
+        var elem = document.getElementById(`selectedFile${key}`)
+        elem.parentNode.removeChild(elem)
+        removeFileFromFileList(key)
       })
     })
+
   })
 
+  // Form Submit
   form.addEventListener("submit", (event) => {
     event.preventDefault()
-    console.log(event.target)
-    let data = new FormData(event.target)
-    let obj = serialize(data)
-    console.log(document.forms["audioform"]["files"].files)
+      
+    if (document.forms["audioform"]["files"].files.length === 0) {
+      toast("No files selected", "error")
+      return
+    }
+    if (event.target.bitrate.value === "") {
+      toast("No bitrate set", "error")
+      return
+    }
+    if (event.target.trackid.value === "") {
+      toast("No track ID set", "error")
+      return
+    } 
     main(document.forms["audioform"]["files"].files, event.target.bitrate.value, event.target.trackid.value)
+    toast("Audio files created", "success")
+  })
+
+  // Form Reset
+  const reset = document.getElementById('resetbtn')
+  reset.addEventListener("click", (event) => {
+    event.preventDefault()
+    form.reset()
+    selectedFiles.innerHTML = ""
+    toast("Reset form", "success")
   })
 }

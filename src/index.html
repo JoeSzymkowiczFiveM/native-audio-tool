@@ -16,9 +16,7 @@
             <input id="files" type="file" accept=".MP3" multiple class="file-input file-input-bordered file-input-primary file-input-sm w-full max-w-xs" />
         </div>
 
-        <div class="mt-5" id="selectedFiles">
-            
-        </div>
+        <div class="mt-5" id="selectedFiles"></div>
 
         <div class="mt-5">
             <label class="block text-gray-700 text-sm font-bold mb-2" for="bitrate">Bitrate</label>
@@ -31,10 +29,13 @@
         </div>
 
         <div class="mt-5">
-            <button id="createbtn" class="btn" action="sumbit">Create</button>
+            <button id="resetbtn" class="btn btn-secondary">Reset</button>
+            <button id="createbtn" class="btn btn-primary" action="submit">Create</button>
         </div>
     </div>
     </form>
+
+    <div id="toastbox" class="toast toast-center alert-error alert-success"></div>
     
   </body>
 </html>
