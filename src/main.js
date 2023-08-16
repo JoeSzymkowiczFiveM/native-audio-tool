@@ -7,12 +7,12 @@ const CreateWindow = () => {
     height: 600,
     autoHideMenuBar: true,
     webPreferences: {
-        preload: path.join(__dirname, 'preload.js')
-      //nodeIntegration: true,
+        preload: path.join(__dirname, 'preload.js'),
+        nodeIntegration: true,
     },
   })
 
-  win.loadFile('index.html')
+  win.loadFile('./src/index.html')
 }
 
 

@@ -1,3 +1,5 @@
+const { main } = require('./audioTool.js')
+
 window.addEventListener('DOMContentLoaded', () => {
   const replaceText = (selector, text) => {
     const element = document.getElementById(selector)
@@ -11,8 +13,24 @@ window.addEventListener('DOMContentLoaded', () => {
   FileListener()
 })
 
+function serialize (data) {
+	let obj = {};
+	for (let [key, value] of data) {
+		if (obj[key] !== undefined) {
+			if (!Array.isArray(obj[key])) {
+				obj[key] = [obj[key]];
+			}
+			obj[key].push(value);
+		} else {
+			obj[key] = value;
+		}
+	}
+	return obj;
+}
+
+
 function FileListener() {
-  var form = document.getElementById("audioform")
+  let form = document.getElementById('audioform')
   const createBtn = document.getElementById("createbtn")
   const selectedFiles = document.getElementById("selectedFiles")
   const mp3Files = document.getElementById("files")
@@ -37,8 +55,11 @@ function FileListener() {
   })
 
   form.addEventListener("submit", (event) => {
-    var formData = new FormData(event.target, createBtn);
-    event.preventDefault();
-    console.log(formData);
+    event.preventDefault()
+    console.log(event.target)
+    let data = new FormData(event.target)
+    let obj = serialize(data)
+    console.log(document.forms["audioform"]["files"].files)
+    main(document.forms["audioform"]["files"].files, event.target.bitrate.value, event.target.trackid.value)
   })
 }

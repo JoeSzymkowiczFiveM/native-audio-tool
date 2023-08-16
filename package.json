@@ -1,14 +1,17 @@
 {
   "name": "native-audio-tool",
-  "version": "1.0.0",
-  "description": "",
-  "main": "./src/index.js",
+  "version": "1.1.0",
+  "main": "./src/main.js",
   "scripts": {
-    "makeWavs": "node ./src/index.js"
+    "start": "electron ."
   },
-  "author": "Joe Szymkowicz",
-  "license": "GPL",
-  "dependencies": {
+  "author": "JoeSzymkowiczFivem, darktrovx, pushkart2",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "daisyui": "^3.5.1",
+    "electron": "^25.5.0",
+    "tailwindcss": "^3.3.3",
     "@ffmpeg-installer/ffmpeg": "^1.1.0",
     "ffprobe": "^1.1.2",
     "ffprobe-static": "^3.1.0",

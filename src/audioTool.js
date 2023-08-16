@@ -9,16 +9,12 @@ const { construct54XML, constructAWCXML } = require('./utils/xmlConstructor.js')
 const trackData = []
 const sides = ['left', 'right']
 
-const fileList = process.env.npm_config_file.split(",");
-const samplerate = process.env.npm_config_samplerate
-const initialTrackId = process.env.npm_config_trackid
-
-function constructFileArray() {
+function constructFileArray(fileList, initialTrackId) {
     let newTrackId = Number(initialTrackId)
-    fileList.forEach((file) => {
+    Array.from(fileList).forEach(file => {
         let fileData = {}
         let tracks = []
-        fileData.track = file.split('.').slice(0, -1).join('.')
+        fileData.track = file.name.split('.').slice(0, -1).join('.')
         sides.forEach(async (side) => {
             try {
                 tracks[side] = fileData.track+'_'+side+'.wav'
@@ -28,13 +24,13 @@ function constructFileArray() {
         });
         fileData.tracks = tracks
         fileData.trackid = newTrackId
-        fileData.filename = file
-        trackData[file] = fileData
+        fileData.filename = file.name
+        trackData[file.name] = fileData
         newTrackId++
     })
 }
 
-async function constructWav(track, filename, channel) {
+async function constructWav(track, filename, channel, sampleRate) {
     return new Promise((resolve,reject)=>{
         if (!fs.existsSync(track)){
             fs.mkdirSync(track);
@@ -48,7 +44,7 @@ async function constructWav(track, filename, channel) {
         .audioChannels(1)
         .outputOption('-map_metadata -1')
         .outputOption('-map 0:a')
-        .outputOptions('-ar '+Number(samplerate))
+        .outputOptions('-ar '+Number(sampleRate))
         .outputOption('-fflags +bitexact')
         .outputOption('-flags:v +bitexact')
         .outputOption('-flags:a +bitexact')
@@ -70,7 +66,7 @@ async function constructWav(track, filename, channel) {
     })
 }
 
-function getWavData(file, filename, channel) {
+async function getWavData(file, filename, channel) {
     ffprobe('./'+file+'/'+file+'_'+channel+'.wav', { path: ffprobeStatic.path }, function(err, metadata) {
         trackData[filename].duration = Number(metadata.streams[0].duration).toFixed(3)*1000;
         trackData[filename].samples = metadata.streams[0].duration_ts;
@@ -78,12 +74,12 @@ function getWavData(file, filename, channel) {
     })
 }
 
-async function main() {
-    await constructFileArray()
+async function main(fileList, sampleRate, initialTrackId) {
+    await constructFileArray(fileList, initialTrackId)
     for (const [filename, fileData] of Object.entries(trackData)) {
         const tracks = fileData['tracks']
         for (const [side, track] of Object.entries(tracks)) {
-            await constructWav(fileData.track, filename, side)
+            await constructWav(fileData.track, filename, side, sampleRate)
             await getWavData(fileData.track, filename, side)
         }
         await constructAWCXML(fileData)
@@ -91,4 +87,6 @@ async function main() {
     await construct54XML(trackData)
 }
 
-main();
+// main();
+
+exports.main = main;

@@ -1,5 +1,6 @@
 # dependencies
 /node_modules
+package-lock.json
 
 # Logs
 logs
@@ -20,6 +21,7 @@ pids
 *.pid.lock
 
 *.mp3
+*.awc
 *.wav
 *.dat54.rel.xml
 *.awc.xml
