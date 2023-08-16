@@ -21,7 +21,7 @@
                 </svg>
               </a>
             </li>
-            <li id="other-menu-btn">
+            <li id="simple-menu-btn">
               <a class="tooltip tooltip-right tooltip-secondary" data-tip="other menu">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
               </a>
@@ -47,7 +47,11 @@
         
                 <div class="mt-5">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="bitrate">Bitrate</label>
-                    <input id="bitrate" type="number" placeholder="Bitrate" class="input input-bordered input-primary input-sm w-full max-w-xs" />
+                    <!-- <input id="bitrate" type="number" placeholder="Bitrate" class="input input-bordered input-primary input-sm w-full max-w-xs" /> -->
+                    <select id="bitrate" class="select select-primary w-full max-w-xs">
+                      <option>32000</option>
+                      <option>48000</option>
+                    </select>
                 </div>
         
                 <div class="mt-5">
@@ -67,8 +71,14 @@
               </div>
             </form>
           </div>
-          <div id="other-menu" class="hidden"></div>
-          <div id="info-menu" class="hidden"></div>
+          <div id="simple-menu" class="hidden"></div>
+          <div id="info-menu" class="hidden join join-vertical place-items-center">
+            <p class="join-item">Created by:</p>
+            <span class="join-item"><a id="joe" class="link link-secondary">@JoeSzymkowicz</a></span>
+            <span class="join-item"><a id="devyn" class="link link-secondary">@Devyn</a></span>
+            <span class="join-item"><a id="snipe" class="link link-secondary">@Snipe</a></span>
+            <span class="join-item"><a id="github" class="link link-secondary">Github</a></span>
+          </div>
       </div>
     </div>
 
