@@ -15,26 +15,27 @@ window.addEventListener('DOMContentLoaded', () => {
   menuListener()
 })
 
+// Listens for menu click events.
 function menuListener() {
 
   document.getElementById("wav-menu-btn").addEventListener("click", (event) => {
     event.preventDefault()
     document.getElementById("wav-menu").classList.remove("hidden")
-    document.getElementById("other-menu").classList.add("hidden")
+    document.getElementById("simple-menu").classList.add("hidden")
     document.getElementById("info-menu").classList.add("hidden")
   })
 
-  document.getElementById("other-menu-btn").addEventListener("click", (event) => {
+  document.getElementById("simple-menu-btn").addEventListener("click", (event) => {
     event.preventDefault()
     document.getElementById("wav-menu").classList.add("hidden")
-    document.getElementById("other-menu").classList.remove("hidden")
+    document.getElementById("simple-menu").classList.remove("hidden")
     document.getElementById("info-menu").classList.add("hidden")
   })
 
   document.getElementById("info-menu-btn").addEventListener("click", (event) => {
     event.preventDefault()
     document.getElementById("wav-menu").classList.add("hidden")
-    document.getElementById("other-menu").classList.add("hidden")
+    document.getElementById("simple-menu").classList.add("hidden")
     document.getElementById("info-menu").classList.remove("hidden")
   })
 
