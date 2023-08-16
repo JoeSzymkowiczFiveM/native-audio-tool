@@ -72,7 +72,7 @@ function formListener() {
   })
 
   // Form Submit
-  form.addEventListener("submit", (event) => {
+  form.addEventListener("submit", async (event) => {
     event.preventDefault()
       
     if (document.forms["audioform"]["files"].files.length === 0) {
@@ -87,7 +87,7 @@ function formListener() {
       toast("No track ID set", "error")
       return
     } 
-    main(document.forms["audioform"]["files"].files, event.target.bitrate.value, event.target.trackid.value, event.target.outputdst.value)
+    await main(document.forms["audioform"]["files"].files, event.target.bitrate.value, event.target.trackid.value, event.target.outputdst.value)
     toast("Audio files created", "success")
   })
 
