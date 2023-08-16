@@ -138,7 +138,7 @@ function formListener() {
     try {
       const response = await main(document.forms["audioform"]["files"].files, event.target.bitrate.value, event.target.trackid.value, event.target.outputdst.value)
       if (response.operation) {
-        toast(asdf, "success")
+        toast(response.message, "success")
       } else {
         toast(response.message, "error")
       }

@@ -19,7 +19,7 @@ function constructFileArray(fileList, initialTrackId) {
             try {
                 tracks[side] = fileData.track+'_'+side+'.wav'
             } catch(e) {
-                console.log('ERROR: ', e)
+                throw new Error(e)
             }
         });
         fileData.tracks = tracks
