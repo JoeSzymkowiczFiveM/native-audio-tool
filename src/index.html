@@ -47,7 +47,11 @@
         
                 <div class="mt-5">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="bitrate">Bitrate</label>
-                    <input id="bitrate" type="number" placeholder="Bitrate" class="input input-bordered input-primary input-sm w-full max-w-xs" />
+                    <!-- <input id="bitrate" type="number" placeholder="Bitrate" class="input input-bordered input-primary input-sm w-full max-w-xs" /> -->
+                    <select id="bitrate" class="select select-primary w-full max-w-xs">
+                      <option>32000</option>
+                      <option>48000</option>
+                    </select>
                 </div>
         
                 <div class="mt-5">
@@ -68,7 +72,13 @@
             </form>
           </div>
           <div id="other-menu" class="hidden"></div>
-          <div id="info-menu" class="hidden"></div>
+          <div id="info-menu" class="hidden join join-vertical place-items-center">
+            <p class="join-item">Created by:</p>
+            <span class="join-item"><a id="joe" class="link link-secondary">@JoeSzymkowicz</a></span>
+            <span class="join-item"><a id="devyn" class="link link-secondary">@Devyn</a></span>
+            <span class="join-item"><a id="snipe" class="link link-secondary">@Snipe</a></span>
+            <span class="join-item"><a id="github" class="link link-secondary">Github</a></span>
+          </div>
       </div>
     </div>
 

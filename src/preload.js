@@ -1,4 +1,5 @@
 const { main } = require('./audioTool.js')
+const { shell } = require('electron')
 
 window.addEventListener('DOMContentLoaded', () => {
   const replaceText = (selector, text) => {
@@ -15,30 +16,48 @@ window.addEventListener('DOMContentLoaded', () => {
 })
 
 function menuListener() {
-  const wav = document.getElementById("wav-menu-btn")
-  const other = document.getElementById("other-menu-btn")
-  const info = document.getElementById("info-menu-btn")
 
-  wav.addEventListener("click", (event) => {
+  document.getElementById("wav-menu-btn").addEventListener("click", (event) => {
     event.preventDefault()
     document.getElementById("wav-menu").classList.remove("hidden")
     document.getElementById("other-menu").classList.add("hidden")
     document.getElementById("info-menu").classList.add("hidden")
   })
 
-  other.addEventListener("click", (event) => {
+  document.getElementById("other-menu-btn").addEventListener("click", (event) => {
     event.preventDefault()
     document.getElementById("wav-menu").classList.add("hidden")
     document.getElementById("other-menu").classList.remove("hidden")
     document.getElementById("info-menu").classList.add("hidden")
   })
 
-  info.addEventListener("click", (event) => {
+  document.getElementById("info-menu-btn").addEventListener("click", (event) => {
     event.preventDefault()
-    document.getElementById("wav").classList.add("hidden")
-    document.getElementById("other").classList.add("hidden")
-    document.getElementById("info").classList.remove("hidden")
+    document.getElementById("wav-menu").classList.add("hidden")
+    document.getElementById("other-menu").classList.add("hidden")
+    document.getElementById("info-menu").classList.remove("hidden")
   })
+
+  document.getElementById("github").addEventListener("click", (event) => {
+    event.preventDefault()
+    shell.openExternal("https://github.com/JoeSzymkowiczFiveM/native-audio-tool")
+  })
+
+  document.getElementById("joe").addEventListener("click", (event) => {
+    event.preventDefault()
+    shell.openExternal("https://github.com/JoeSzymkowiczFiveM")
+  })
+
+  document.getElementById("devyn").addEventListener("click", (event) => {
+    event.preventDefault()
+    shell.openExternal("https://github.com/darktrovx")
+  })
+
+  document.getElementById("snipe").addEventListener("click", (event) => {
+    event.preventDefault()
+    shell.openExternal("https://github.com/pushkart2")
+  })
+
 }
 
 function removeFileFromFileList(index) {
