@@ -56,7 +56,7 @@ async function construct54XML(trackData) {
                 '@type': 'StreamingSound',
                 Name: value.track+'_song',
                 Header: {
-                    Flag: {
+                    Flags: {
                         '@value': '0x0180C001',
                     },
                     Flags2: {
@@ -84,7 +84,7 @@ async function construct54XML(trackData) {
                 '@type': 'SimpleSound',
                 Name: value.track+'_left_simple',
                 Header: {
-                    Flag: {
+                    Flags: {
                         '@value': '0x00800040',
                     },
                     Pan: {
@@ -96,7 +96,9 @@ async function construct54XML(trackData) {
                 },
                 ContainerName: 'songdirectory/'+value.track,
                 FileName: value.track+'_left',
-                WaveSlotNum: '0',
+                WaveSlotNum: {
+                    '@value': '0',
+                },
             }
         }
         trackInfo.push(simpleSound1)
@@ -104,7 +106,7 @@ async function construct54XML(trackData) {
                 '@type': 'SimpleSound',
                 Name: value.track+'_right_simple',
                 Header: {
-                    Flag: {
+                    Flags: {
                         '@value': '0x00800040',
                     },
                     Pan: {
@@ -116,7 +118,9 @@ async function construct54XML(trackData) {
                 },
                 ContainerName: 'songdirectory/'+value.track,
                 FileName: value.track+'_right',
-                WaveSlotNum: '0',
+                WaveSlotNum: {
+                    '@value': '0',
+                },
             }
         }
         trackInfo.push(simpleSound2)
