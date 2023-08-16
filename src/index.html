@@ -29,6 +29,11 @@
         </div>
 
         <div class="mt-5">
+          <label class="block text-gray-700 text-sm font-bold mb-2" for="outputdst">Output File Path (optional)</label>
+          <input id="outputdst" type="text" pattern="^(.+)\/([^\/]+)$" placeholder="output destination" class="input input-bordered input-primary input-sm w-full max-w-xs" />
+      </div>
+
+        <div class="mt-5">
             <button id="resetbtn" class="btn btn-secondary">Reset</button>
             <button id="createbtn" class="btn btn-primary" action="submit">Create</button>
         </div>

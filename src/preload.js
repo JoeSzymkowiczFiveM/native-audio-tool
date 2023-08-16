@@ -18,8 +18,6 @@ function removeFileFromFileList(index) {
   const input = document.forms["audioform"]["files"].files
   // const { files } = input
   const files = input
-
-  console.log(input)
   
   for (let i = 0; i < files.length; i++) {
     const file = files[i]
@@ -89,7 +87,7 @@ function formListener() {
       toast("No track ID set", "error")
       return
     } 
-    main(document.forms["audioform"]["files"].files, event.target.bitrate.value, event.target.trackid.value)
+    main(document.forms["audioform"]["files"].files, event.target.bitrate.value, event.target.trackid.value, event.target.outputdst.value)
     toast("Audio files created", "success")
   })
 

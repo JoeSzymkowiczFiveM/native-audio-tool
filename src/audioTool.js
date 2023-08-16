@@ -75,7 +75,7 @@ async function getWavData(file, filename, channel) {
     })
 }
 
-async function main(fileList, sampleRate, initialTrackId) {
+async function main(fileList, sampleRate, initialTrackId, outputPath) {
     await constructFileArray(fileList, initialTrackId)
     for (const [filename, fileData] of Object.entries(trackData)) {
         const tracks = fileData['tracks']
