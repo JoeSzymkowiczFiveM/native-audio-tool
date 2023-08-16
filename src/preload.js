@@ -114,9 +114,17 @@ function formListener() {
     if (event.target.trackid.value === "") {
       toast("No track ID set", "error")
       return
-    } 
-    await main(document.forms["audioform"]["files"].files, event.target.bitrate.value, event.target.trackid.value, event.target.outputdst.value)
-    toast("Audio files created", "success")
+    }
+    try {
+      const response = await main(document.forms["audioform"]["files"].files, event.target.bitrate.value, event.target.trackid.value, event.target.outputdst.value)
+      if (response.operation) {
+        toast(asdf, "success")
+      } else {
+        toast(response.message, "error")
+      }
+    } catch(e) {
+      toast(e, "error")
+    }
   })
 
   // Form Reset

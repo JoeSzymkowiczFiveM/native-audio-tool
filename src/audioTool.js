@@ -76,16 +76,21 @@ async function getWavData(file, filename, channel) {
 }
 
 async function main(fileList, sampleRate, initialTrackId, outputPath) {
-    await constructFileArray(fileList, initialTrackId)
-    for (const [filename, fileData] of Object.entries(trackData)) {
-        const tracks = fileData['tracks']
-        for (const [side, track] of Object.entries(tracks)) {
-            await constructWav(fileData.track, fileData.path, side, sampleRate)
-            await getWavData(fileData.track, filename, side)
+    try {
+        await constructFileArray(fileList, initialTrackId)
+        for (const [filename, fileData] of Object.entries(trackData)) {
+            const tracks = fileData['tracks']
+            for (const [side, track] of Object.entries(tracks)) {
+                await constructWav(fileData.track, fileData.path, side, sampleRate)
+                await getWavData(fileData.track, filename, side)
+            }
+            await constructAWCXML(fileData)
         }
-        await constructAWCXML(fileData)
+        await construct54XML(trackData)
+        return {operation: true, message: 'Audio data constructed'}
+    } catch(e) {
+        return {operation: false, message: e}
     }
-    await construct54XML(trackData)
 }
 
 // main();
