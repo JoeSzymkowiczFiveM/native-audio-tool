@@ -11,7 +11,35 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   formListener()
+  menuListener()
 })
+
+function menuListener() {
+  const wav = document.getElementById("wav-menu-btn")
+  const other = document.getElementById("other-menu-btn")
+  const info = document.getElementById("info-menu-btn")
+
+  wav.addEventListener("click", (event) => {
+    event.preventDefault()
+    document.getElementById("wav-menu").classList.remove("hidden")
+    document.getElementById("other-menu").classList.add("hidden")
+    document.getElementById("info-menu").classList.add("hidden")
+  })
+
+  other.addEventListener("click", (event) => {
+    event.preventDefault()
+    document.getElementById("wav-menu").classList.add("hidden")
+    document.getElementById("other-menu").classList.remove("hidden")
+    document.getElementById("info-menu").classList.add("hidden")
+  })
+
+  info.addEventListener("click", (event) => {
+    event.preventDefault()
+    document.getElementById("wav").classList.add("hidden")
+    document.getElementById("other").classList.add("hidden")
+    document.getElementById("info").classList.remove("hidden")
+  })
+}
 
 function removeFileFromFileList(index) {
   const dt = new DataTransfer()
