@@ -149,5 +149,65 @@ async function construct54XML(trackData) {
     });
 }
 
+async function construct151XML(trackData) {
+    if (!fs.existsSync('data')){
+        fs.mkdirSync('data');
+    }
+
+    const trackInfo = []
+    const simpleInfo = { Item: [] }
+    for (const [key, value] of Object.entries(trackData)) {
+        
+        let simpleASDF = value.track+'_song'
+        let itemObj = {Hash0: {}, Hash1: simpleASDF}
+        simpleInfo['Item'].push(itemObj)
+        // Item: trackInfo.map(a => a.Item),
+    }
+    
+    const obj = {
+        Dat151: {
+            Version: {
+                '@value': '6353781',
+            },
+            Items: {
+                Item: {
+                    '@type': 'RadioTrack', '@ntOffset': '0',
+                    Name: 'customsongs_radiotrack01',
+                    Unk00: { '@value': '0xAAAAAAA4' },
+                    TrackType: { '@value': '5' },
+                    Unk01: { '@value': '0' },
+                    Unk02: { '@value': '0' },
+                    Unk03: { '@value': '10' },
+                    Unk04: { '@value': '0' },
+                    Unk05: { '@value': '0' },
+                    Unk06: { '@value': '0' },
+                    Unk07: { '@value': '0' },
+                    Unk08: { '@value': '0' },
+                    Unk09: { '@value': '0' },
+                    Unk10: { '@value': '0' },
+                    Unk11: { '@value': '0' },
+                    Unk12: { '@value': '0' },
+                    Unk13: { '@value': '0' },
+                    Unk14: { '@value': '0' },
+                    Unk15: { '@value': '0' },
+                    Unk16: { '@value': '0' },
+                    Tracks: simpleInfo,
+                }
+            },
+            
+        }
+    };
+        
+    const doc = create(obj);
+    const xml = doc.end({ prettyPrint: true });
+    // console.log(xml)
+    fs.writeFile('./data/dlccustomsongs_game.dat151.rel.xml', xml, err => {
+        if (err) {
+            console.error(err);
+        }
+    });
+}
+
 exports.construct54XML = construct54XML;
 exports.constructAWCXML = constructAWCXML;
+exports.construct151XML = construct151XML; 

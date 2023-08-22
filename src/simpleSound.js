@@ -4,10 +4,10 @@ ffmpeg.setFfmpegPath(ffmpegPath);
 var ffprobe = require('ffprobe')
 var ffprobeStatic = require('ffprobe-static');
 const fs = require('fs');
-const { construct54XML, constructAWCXML, construct151XML } = require('./utils/xmlConstructor.js')
+const { construct54XML, constructAWCXML } = require('./utils/xmlConstructor.js')
 
 const trackData = []
-const sides = ['left', 'right']
+const sides = ['left']
 
 function constructFileArray(fileList, initialTrackId) {
     let newTrackId = Number(initialTrackId)
@@ -87,13 +87,8 @@ async function main(fileList, sampleRate, initialTrackId, outputPath) {
             await constructAWCXML(fileData)
         }
         await construct54XML(trackData)
-        await construct151XML(trackData)
-        if (!fs.existsSync('audiodirectory')){
-            fs.mkdirSync('audiodirectory');
-        }
         return {operation: true, message: 'Audio data constructed'}
     } catch(e) {
-        console.log(e)
         return {operation: false, message: e}
     }
 }
