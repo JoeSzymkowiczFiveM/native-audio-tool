@@ -40,7 +40,7 @@ async function construct54XML(trackData) {
 
     var containerPaths = { Item: [] };
     for (const [_, value] of Object.entries(trackData)) {
-        let containerPathsTrack = 'songdirectory\\'+value.track
+        let containerPathsTrack = 'audiodirectory\\'+value.track
         containerPaths['Item'].push(containerPathsTrack)
     }
 
@@ -94,7 +94,7 @@ async function construct54XML(trackData) {
                         '@value': '0',
                     },
                 },
-                ContainerName: 'songdirectory/'+value.track,
+                ContainerName: 'audiodirectory/'+value.track,
                 FileName: value.track+'_left',
                 WaveSlotNum: {
                     '@value': '0',
@@ -116,7 +116,7 @@ async function construct54XML(trackData) {
                         '@value': '0',
                     },
                 },
-                ContainerName: 'songdirectory/'+value.track,
+                ContainerName: 'audiodirectory/'+value.track,
                 FileName: value.track+'_right',
                 WaveSlotNum: {
                     '@value': '0',

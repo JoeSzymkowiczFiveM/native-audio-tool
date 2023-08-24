@@ -98,6 +98,4 @@ async function main(fileList, sampleRate, initialTrackId, outputPath) {
     }
 }
 
-// main();
-
 exports.main = main;
