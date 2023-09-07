@@ -1,4 +1,4 @@
-const { app, BrowserWindow  } = require('electron')
+const { app, BrowserWindow, ipcMain   } = require('electron')
 const path = require('path')
 
 const CreateWindow = () => {
@@ -8,17 +8,23 @@ const CreateWindow = () => {
     autoHideMenuBar: true,
     icon: path.join(__dirname, 'img/sound.png'),
     webPreferences: {
-        preload: path.join(__dirname, 'preload.js'),
+        //preload: path.join(__dirname, 'preload.js'),
+        preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
         nodeIntegration: true,
-        devTools: false,
+        sandbox: false,
+        devTools: true,
     },
   })
 
   win.loadFile('./src/index.html')
 }
 
+if (require('electron-squirrel-startup')) app.quit();
+
 // App Events
 app.whenReady().then(() => {
+  ipcMain.handle('ping', () => 'pong')
+
     CreateWindow()
 
     // macOS
