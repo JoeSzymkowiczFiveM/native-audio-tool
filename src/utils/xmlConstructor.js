@@ -163,6 +163,57 @@ async function construct151XML(trackData) {
         simpleInfo['Item'].push(itemObj)
         // Item: trackInfo.map(a => a.Item),
     }
+
+    const itemInfo = []
+
+    const asdf1 = {Item: {
+        '@type': 'RadioTrack', '@ntOffset': '0',
+        Name: 'customsongs_radiotrack01',
+        Unk00: { '@value': '0xAAAAAAA4' },
+        TrackType: { '@value': '5' },
+        Unk01: { '@value': '0' },
+        Unk02: { '@value': '0' },
+        Unk03: { '@value': '10' },
+        Unk04: { '@value': '0' },
+        Unk05: { '@value': '0' },
+        Unk06: { '@value': '0' },
+        Unk07: { '@value': '0' },
+        Unk08: { '@value': '0' },
+        Unk09: { '@value': '0' },
+        Unk10: { '@value': '0' },
+        Unk11: { '@value': '0' },
+        Unk12: { '@value': '0' },
+        Unk13: { '@value': '0' },
+        Unk14: { '@value': '0' },
+        Unk15: { '@value': '0' },
+        Unk16: { '@value': '0' },
+        Tracks: simpleInfo,
+    }}
+    itemInfo.push(asdf1)
+
+    const asdf2 = {Item: {
+        '@type': 'RadioStation', '@ntOffset': '0',
+        Name: 'gmm_test_radio_station',
+        Unk00: { '@value': '0xAA9009AA' },
+        WheelPosition: { '@value': '28000' },
+        Unk02: { '@value': '0' },
+        MusicGenre: { '@value': '1' },
+        RadioName: 'RADIO_49_COMMUNITYSLOT',
+        Unk04: { '@value': '0' },
+        MusicList: { Item: 'customsongs_radiotrack01' }
+    }}
+    itemInfo.push(asdf2)
+    const asdf3 = {Item: {
+        '@type': 'RadioStationList', '@ntOffset': '0',
+        Name: 'radio_stations_dlc',
+        Stations: { Item: 'gmm_test_radio_station' }
+    }}
+    itemInfo.push(asdf3)
+
+    const asdf4 = {Items: {
+        Item: trackInfo.map(a => a.Item),
+    }}
+    itemInfo.push(asdf4)
     
     const obj = {
         Dat151: {
@@ -170,29 +221,7 @@ async function construct151XML(trackData) {
                 '@value': '6353781',
             },
             Items: {
-                Item: {
-                    '@type': 'RadioTrack', '@ntOffset': '0',
-                    Name: 'customsongs_radiotrack01',
-                    Unk00: { '@value': '0xAAAAAAA4' },
-                    TrackType: { '@value': '5' },
-                    Unk01: { '@value': '0' },
-                    Unk02: { '@value': '0' },
-                    Unk03: { '@value': '10' },
-                    Unk04: { '@value': '0' },
-                    Unk05: { '@value': '0' },
-                    Unk06: { '@value': '0' },
-                    Unk07: { '@value': '0' },
-                    Unk08: { '@value': '0' },
-                    Unk09: { '@value': '0' },
-                    Unk10: { '@value': '0' },
-                    Unk11: { '@value': '0' },
-                    Unk12: { '@value': '0' },
-                    Unk13: { '@value': '0' },
-                    Unk14: { '@value': '0' },
-                    Unk15: { '@value': '0' },
-                    Unk16: { '@value': '0' },
-                    Tracks: simpleInfo,
-                }
+                Item: itemInfo.map(a => a.Item),
             },
             
         }
