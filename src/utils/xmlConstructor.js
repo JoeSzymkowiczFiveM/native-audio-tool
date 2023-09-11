@@ -170,7 +170,7 @@ async function construct151XML(trackData) {
         '@type': 'RadioTrack', '@ntOffset': '0',
         Name: 'customsongs_radiotrack01',
         Unk00: { '@value': '0xAAAAAAA4' },
-        TrackType: { '@value': '5' },
+        TrackType: { '@value': '2' },
         Unk01: { '@value': '0' },
         Unk02: { '@value': '0' },
         Unk03: { '@value': '10' },
