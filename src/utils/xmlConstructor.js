@@ -12,7 +12,6 @@ async function constructAWCXML(fileData) {
     .ele('Item').ele({'Type' : 'data'}).up().up()
     .ele('Item').ele({'Type' : 'seektable'}).up().up().up().up()
     const {track, filename, tracks, trackid} = fileData
-
     for (const [side, trackFileName] of Object.entries(tracks)) {
         if (side=='left') {
             doc.ele('Item').ele({'Name' : track+'_'+side}).up().ele({'FileName' : trackFileName}).up()
@@ -40,7 +39,7 @@ async function construct54XML(trackData) {
 
     var containerPaths = { Item: [] };
     for (const [_, value] of Object.entries(trackData)) {
-        let containerPathsTrack = 'audiodirectory\\'+value.track
+        const containerPathsTrack = 'audiodirectory\\'+value.track
         containerPaths['Item'].push(containerPathsTrack)
     }
 
@@ -48,8 +47,8 @@ async function construct54XML(trackData) {
     for (const [key, value] of Object.entries(trackData)) {
         const simpleInfo = { Item: [] }
         for (const [channelKey, channelFileName] of Object.entries(trackData[key].tracks)) {
-            let simpleASDF = value.track+'_'+channelKey+'_simple'
-            simpleInfo['Item'].push(simpleASDF)
+            const simpleTrackName = value.track+'_'+channelKey+'_simple'
+            simpleInfo['Item'].push(simpleTrackName)
         }
         // const indTrack = []
         const streamingSound = {Item: {
@@ -166,7 +165,7 @@ async function construct151XML(trackData) {
 
     const itemInfo = []
 
-    const asdf1 = {Item: {
+    const info1 = {Item: {
         '@type': 'RadioTrack', '@ntOffset': '0',
         Name: 'customsongs_radiotrack01',
         Unk00: { '@value': '0xAAAAAAA4' },
@@ -189,9 +188,9 @@ async function construct151XML(trackData) {
         Unk16: { '@value': '0' },
         Tracks: simpleInfo,
     }}
-    itemInfo.push(asdf1)
+    itemInfo.push(info1)
 
-    const asdf2 = {Item: {
+    const info2 = {Item: {
         '@type': 'RadioStation', '@ntOffset': '0',
         Name: 'gmm_test_radio_station',
         Unk00: { '@value': '0xAA9009AA' },
@@ -202,18 +201,19 @@ async function construct151XML(trackData) {
         Unk04: { '@value': '0' },
         MusicList: { Item: 'customsongs_radiotrack01' }
     }}
-    itemInfo.push(asdf2)
-    const asdf3 = {Item: {
+    itemInfo.push(info2)
+
+    const info3 = {Item: {
         '@type': 'RadioStationList', '@ntOffset': '0',
         Name: 'radio_stations_dlc',
         Stations: { Item: 'gmm_test_radio_station' }
     }}
-    itemInfo.push(asdf3)
+    itemInfo.push(info3)
 
-    const asdf4 = {Items: {
+    const info4 = {Items: {
         Item: trackInfo.map(a => a.Item),
     }}
-    itemInfo.push(asdf4)
+    itemInfo.push(info4)
     
     const obj = {
         Dat151: {

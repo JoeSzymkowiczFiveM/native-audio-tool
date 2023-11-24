@@ -1,21 +1,26 @@
 const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
+const util = require('node:util');
 const ffmpeg = require('fluent-ffmpeg');
 ffmpeg.setFfmpegPath(ffmpegPath);
 var ffprobe = require('ffprobe')
 var ffprobeStatic = require('ffprobe-static');
 const fs = require('fs');
-const { construct54XML, constructAWCXML, construct151XML } = require('./utils/xmlConstructor.js')
+const { constructAWCXML, construct54XML, construct151XML } = require('./utils/xmlConstructor.js')
+const { constructAWCXMLSimple, construct54XMLSimple } = require('./utils/xmlConstructorSimple.js')
 
 const trackData = []
-const sides = ['left', 'right']
-
-function constructFileArray(fileList, initialTrackId) {
+const constructFileArray = async (fileList, initialTrackId, type) => {
     let newTrackId = Number(initialTrackId)
-    Array.from(fileList).forEach(file => {
+    console.log(typeof(fileList))
+    fileList.forEach(file => {
         let fileData = {}
         let tracks = []
-        fileData.track = file.name.split('.').slice(0, -1).join('.')
-        sides.forEach(async (side) => {
+        fileData.track = file.split('.').slice(0, -1).join('.')
+        const sides = ['left']
+        if (type === 'radio') {
+            sides.push('right')
+        }
+        sides.forEach((side) => {
             try {
                 tracks[side] = fileData.track+'_'+side+'.wav'
             } catch(e) {
@@ -24,78 +29,106 @@ function constructFileArray(fileList, initialTrackId) {
         });
         fileData.tracks = tracks
         fileData.trackid = newTrackId
-        fileData.filename = file.name
-        fileData.path = file.path
-        trackData[file.name] = fileData
+        // fileData.filename = file
+        trackData[file] = fileData
         newTrackId++
     })
 }
 
-async function constructWav(track, filePath, channel, sampleRate) {
-    return new Promise((resolve,reject)=>{
-        if (!fs.existsSync(track)){
+const constructWav = async (track, filename, channel, sampleRate, type) => {
+    let filepath;
+    if (type === 'simple') {
+        const customSoundsDir = './audiodirectory/custom_sounds/';
+        if (!fs.existsSync(customSoundsDir)) {
+            fs.mkdirSync(customSoundsDir);
+        }
+        filepath = `${customSoundsDir}${track}_${channel}.wav`;
+    } else if (type === 'radio') {
+        if (!fs.existsSync(track)) {
             fs.mkdirSync(track);
         }
+        filepath = `./${track}/${track}_${channel}.wav`;
+    }
 
-        const side = channel === 'left' ? '0.0.0' : '0.0.1'
+    const side = channel === 'left' ? '0.0.0' : '0.0.1';
+    return new Promise((resolve, reject)=>{
         ffmpeg()
-        .input(filePath)
-        .inputFormat('mp3')
-        .outputOption('-map_channel ' + side)
-        .audioChannels(1)
-        .outputOption('-map_metadata -1')
-        .outputOption('-map 0:a')
-        .outputOptions('-ar '+Number(sampleRate))
-        .outputOption('-fflags +bitexact')
-        .outputOption('-flags:v +bitexact')
-        .outputOption('-flags:a +bitexact')
-        .format('wav')
+            .input(filename)
+            .inputFormat('mp3')
+            .outputOption('-map_channel ' + side)
+            .audioChannels(1)
+            .outputOption('-map_metadata -1')
+            .outputOption('-map 0:a')
+            .outputOptions('-ar ' + Number(sampleRate))
+            .outputOption('-fflags +bitexact')
+            .outputOption('-flags:v +bitexact')
+            .outputOption('-flags:a +bitexact')
+            .format('wav')
+            .on('error', (err) => {
+                console.log('An error occurred: ' + err.message);
+                return reject(new Error(err));
+            })
+            .on('progress', (progress) => {
+                console.log('Processing: ' + progress.targetSize + ' KB converted');
+            })
+            .on('end', async () => {
+                console.log('Processing finished !');
+                console.log('Generated ', filepath);
 
-        .on('error', (err) => {
-            console.log('An error occurred: ' + err.message);
-            return reject(new Error(err))
-        })
-        .on('progress', (progress) => {
-            console.log('Processing: ' + progress.targetSize + ' KB converted');
-        })
-        .on('end', () => {
-            //console.log('Processing finished !');
-            console.log('Generated ', './'+track+'/'+track+'_'+channel+'.wav')
-            resolve()
-        })
-        .save('./'+track+'/'+track+'_'+channel+'.wav')
+                ffprobe(filepath, { path: ffprobeStatic.path }, function(err, metadata) {
+                    trackData[filename].duration = Number(metadata.streams[0].duration).toFixed(3)*1000;
+                    trackData[filename].samples = metadata.streams[0].duration_ts;
+                    trackData[filename].sample_rate = metadata.streams[0].sample_rate;
+                    resolve();
+                });
+            })
+            .save(filepath);
     })
-}
+};
 
-async function getWavData(file, filename, channel) {
-    ffprobe('./'+file+'/'+file+'_'+channel+'.wav', { path: ffprobeStatic.path }, function(err, metadata) {
-        trackData[filename].duration = Number(metadata.streams[0].duration).toFixed(3)*1000;
-        trackData[filename].samples = metadata.streams[0].duration_ts;
-        trackData[filename].sample_rate = metadata.streams[0].sample_rate;
-    })
-}
+const main = async () => {
+    let fileList = process.env.npm_config_file?.split(",");
+    const folder = process.env.npm_config_folder;
+    const sampleRate = process.env.npm_config_samplerate;
+    const initialTrackId = process.env.npm_config_trackid;
+    const generationType = process.env.npm_config_type;
+    if (!fs.existsSync('./audiodirectory/')){
+        fs.mkdirSync('./audiodirectory/');
+    };
 
-async function main(fileList, sampleRate, initialTrackId, outputPath) {
+    if (!fileList && folder) {
+        fileList = [];
+        fs.readdirSync(folder).forEach(file => {
+            fileList.push(file);
+        });
+    }
+    
     try {
-        await constructFileArray(fileList, initialTrackId)
+        await constructFileArray(fileList, initialTrackId, generationType)
         for (const [filename, fileData] of Object.entries(trackData)) {
-            const tracks = fileData['tracks']
+            const tracks = fileData['tracks'];
             for (const [side, track] of Object.entries(tracks)) {
-                await constructWav(fileData.track, fileData.path, side, sampleRate)
-                await getWavData(fileData.track, filename, side)
-            }
-            await constructAWCXML(fileData)
+                await constructWav(fileData.track, filename, side, sampleRate, generationType);
+            };
+            
+            if (generationType === 'radio') {
+                await constructAWCXML(fileData);
+            };
         }
-        await construct54XML(trackData)
-        await construct151XML(trackData)
+        if (generationType === 'radio') {
+            construct54XML(trackData);
+            construct151XML(trackData);
+        } else if (generationType === 'simple') {
+            constructAWCXMLSimple(trackData);
+            construct54XMLSimple(trackData);
+        }
         if (!fs.existsSync('audiodirectory')){
             fs.mkdirSync('audiodirectory');
         }
-        return {operation: true, message: 'Audio data constructed'}
     } catch(e) {
         console.log(e)
         return {operation: false, message: e}
     }
 }
 
-exports.main = main;
+main();
