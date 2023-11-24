@@ -6,6 +6,12 @@
      - `--samplerate` - The sample rate of the outputted files
      - `--trackid` - The starting trackid that will be used for the processed tracks, used specifically for radio type
      - `--type` - This can be `simple` or `radio`, each outputting their respective audio data files.
-<!-- `npm run makeWavs --file=lock.mp3 --samplerate=48000 --trackid=5000 --type=radio` -->
-<!-- `npm run makeWavs --file=lock.mp3 --samplerate=48000 --trackid=5000 --type=radio` -->
-<!-- `npm run makeWavs --samplerate=32000 --type=simple --folder=test` -->
+
+## 👀 Usage
+`npm run makeWavs --file=lock.mp3 --samplerate=48000 --trackid=5000 --type=radio`
+
+`npm run makeWavs --file=lock.mp3 --samplerate=48000 --trackid=5000 --type=radio`
+
+`npm run makeWavs --file=lock.mp3,unlock.mp3 --samplerate=32000 --type=simple`
+
+`npm run makeWavs --samplerate=32000 --type=simple --folder=test`
