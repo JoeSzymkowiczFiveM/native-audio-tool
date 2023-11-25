@@ -50,37 +50,40 @@ const constructWav = async (track, filename, channel, sampleRate, type) => {
     }
     const side = channel === 'left' ? '0.0.0' : '0.0.1';
     return new Promise((resolve, reject)=>{
-        ffmpeg()
-            .input(filename)
-            .inputFormat('mp3')
-            .outputOption('-map_channel ' + side)
-            .audioChannels(1)
-            .outputOption('-map_metadata -1')
-            .outputOption('-map 0:a')
-            .outputOptions('-ar ' + Number(sampleRate))
-            .outputOption('-fflags +bitexact')
-            .outputOption('-flags:v +bitexact')
-            .outputOption('-flags:a +bitexact')
-            .format('wav')
-            .on('error', (err) => {
-                console.log('An error occurred: ' + err.message);
-                return reject(new Error(err));
-            })
-            .on('progress', (progress) => {
-                console.log('Processing: ' + progress.targetSize + ' KB converted');
-            })
-            .on('end', async () => {
-                console.log('Processing finished !');
-                console.log('Generated ', filepath);
+        let ff = ffmpeg()
+        ff.input(filename)
+        ff.inputFormat('mp3')
+        ff.outputOption('-map_channel ' + side)
+        ff.audioChannels(1)
+        ff.outputOption('-map_metadata -1')
+        ff.outputOption('-map 0:a')
+        ff.outputOptions('-ar ' + Number(sampleRate))
+        ff.outputOption('-fflags +bitexact')
+        ff.outputOption('-flags:v +bitexact')
+        ff.outputOption('-flags:a +bitexact')
+        if (type === 'simple') {
+            ff.withAudioFilter('loudnorm=I=-15')
+        }
+        ff.format('wav')
+        .on('error', (err) => {
+            console.log('An error occurred: ' + err.message);
+            return reject(new Error(err));
+        })
+        .on('progress', (progress) => {
+            console.log('Processing: ' + progress.targetSize + ' KB converted');
+        })
+        .on('end', async () => {
+            console.log('Processing finished !');
+            console.log('Generated ', filepath);
 
-                ffprobe(filepath, { path: ffprobeStatic.path }, function(err, metadata) {
-                    trackData[filename].duration = Number(metadata.streams[0].duration).toFixed(3)*1000;
-                    trackData[filename].samples = metadata.streams[0].duration_ts;
-                    trackData[filename].sample_rate = metadata.streams[0].sample_rate;
-                    resolve();
-                });
-            })
-            .save(filepath);
+            ffprobe(filepath, { path: ffprobeStatic.path }, function(err, metadata) {
+                trackData[filename].duration = Number(metadata.streams[0].duration).toFixed(3)*1000;
+                trackData[filename].samples = metadata.streams[0].duration_ts;
+                trackData[filename].sample_rate = metadata.streams[0].sample_rate;
+                resolve();
+            });
+        })
+        .save(filepath);
     })
 };
 
