@@ -1,6 +1,8 @@
 const fs = require('fs');
 const path = require('path');
+const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
 const ffmpeg = require('fluent-ffmpeg');
+ffmpeg.setFfmpegPath(ffmpegPath);
 
 let fileList = [];
 const constructWav = async (filename) => {
