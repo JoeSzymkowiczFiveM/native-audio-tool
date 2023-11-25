@@ -1,5 +1,5 @@
 # native-audio-tool
-1. Run `pnpm install`
+1. Run `npm install`
 2. In the terminal `npm run makeWavs` with the following parameters
      - `--file` - comma separated list of files, with the extension that will be processed. The script only uses MP3s.
      - `--folder` - If you dont want to specify a list of files, you can specify folder in the root of the project, that holds the files that will be processed. The script only uses MP3s.
