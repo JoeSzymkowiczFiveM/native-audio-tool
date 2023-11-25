@@ -6,7 +6,6 @@ async function constructAWCXMLSimple(trackData) {
         fs.mkdirSync('data');
     }
 
-    console.log(trackData)
     var containerPaths = { Item: [] };
     for (const [_, value] of Object.entries(trackData)) {
         let containerPathsTrack = 'audiodirectory\\'+value.track
@@ -150,9 +149,15 @@ async function construct54XMLSimple(trackData) {
         soundSetInfo.push(soundSets)
     }
 
+    let soundset = process.env.soundset;
+
+    if (soundset === null) {
+        soundset = 'special_soundset'
+    }
+
     const simpleSound2 = {Item: {
         '@type': 'SoundSet',
-        Name: 'special_soundset',
+        Name: soundset,
         Header: {
             Flags: {
                 '@value': '0xAAAAAAAA',
