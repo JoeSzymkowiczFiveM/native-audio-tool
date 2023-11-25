@@ -23,6 +23,7 @@ pids
 
 /data
 *.mp3
+*.ogg
 *.awc
 *.wav
 *.dat54.rel.xml
