@@ -1,4 +1,5 @@
 const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
+const path = require('path');
 const ffmpeg = require('fluent-ffmpeg');
 ffmpeg.setFfmpegPath(ffmpegPath);
 var ffprobe = require('ffprobe')
@@ -10,11 +11,10 @@ const { constructAWCXMLSimple, construct54XMLSimple } = require('./utils/xmlCons
 const trackData = []
 const constructFileArray = async (fileList, initialTrackId, type) => {
     let newTrackId = Number(initialTrackId)
-    console.log(typeof(fileList))
     fileList.forEach(file => {
         let fileData = {}
         let tracks = []
-        fileData.track = file.split('.').slice(0, -1).join('.')
+        fileData.track = path.basename(file, '.mp3')
         const sides = ['left']
         if (type === 'radio') {
             sides.push('right')
@@ -48,7 +48,6 @@ const constructWav = async (track, filename, channel, sampleRate, type) => {
         }
         filepath = `./${track}/${track}_${channel}.wav`;
     }
-
     const side = channel === 'left' ? '0.0.0' : '0.0.1';
     return new Promise((resolve, reject)=>{
         ffmpeg()
@@ -91,14 +90,14 @@ const main = async () => {
     const sampleRate = process.env.npm_config_samplerate;
     const initialTrackId = process.env.npm_config_trackid;
     const generationType = process.env.npm_config_type;
-    if (!fs.existsSync('./audiodirectory/')){
+    if (!fs.existsSync('./audiodirectory/')) {
         fs.mkdirSync('./audiodirectory/');
     };
 
     if (!fileList && folder) {
         fileList = [];
         fs.readdirSync(folder).forEach(file => {
-            fileList.push(file);
+            fileList.push(`./${folder}/${file}`);
         });
     }
     
