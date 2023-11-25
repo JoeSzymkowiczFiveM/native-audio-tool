@@ -25,3 +25,7 @@ I included a small script to convert OGG files to MP3, to by used as input for t
 
 ### 👀 Usage
 `npm run convert`
+
+
+## Discord
+[Joe Szymkowicz FiveM Development](https://discord.gg/5vPGxyCB4z)
