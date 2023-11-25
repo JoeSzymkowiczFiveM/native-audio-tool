@@ -149,9 +149,9 @@ async function construct54XMLSimple(trackData) {
         soundSetInfo.push(soundSets)
     }
 
-    let soundset = process.env.soundset;
+    let soundset = process.env.npm_config_soundset;
 
-    if (soundset === null) {
+    if (soundset === null || soundset === undefined) {
         soundset = 'special_soundset'
     }
 
