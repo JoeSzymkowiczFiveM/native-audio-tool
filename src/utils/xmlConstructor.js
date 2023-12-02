@@ -93,7 +93,11 @@ async function constructAWCXML(fileData) {
     const doc = create(obj);
     const xml = doc.end({ prettyPrint: true });
 
-    fs.writeFile('./'+fileData.track+'.awc.xml', xml, err => {
+    if (!fs.existsSync('audiodirectory')){
+        fs.mkdirSync('audiodirectory');
+    }
+
+    fs.writeFile('./audiodirectory/'+fileData.track+'.awc.xml', xml, err => {
         if (err) {
             console.error(err);
         }
