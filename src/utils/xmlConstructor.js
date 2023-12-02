@@ -2,30 +2,98 @@ const fs = require('fs');
 const { create } = require('xmlbuilder2');
 
 async function constructAWCXML(fileData) {
-    const doc = create({ version: '1.0', encoding: "UTF-8" })
-    .ele('AudioWaveContainer')
-    .ele('Version').att('value', '1').up()
-    .ele('ChunkIndices').att('value', 'True').up()
-    .ele('MultiChannel', { 'value': 'True' }).up()
-    .ele('Streams')
-    .ele('Item').ele('Chunks').ele('Item').ele({'Type' : 'streamformat'}).up().ele('BlockSize', { 'value': '524288' }).up().up()
-    .ele('Item').ele({'Type' : 'data'}).up().up()
-    .ele('Item').ele({'Type' : 'seektable'}).up().up().up().up()
-    const {track, filename, tracks, trackid} = fileData
-    for (const [side, trackFileName] of Object.entries(tracks)) {
-        if (side=='left') {
-            doc.ele('Item').ele({'Name' : track+'_'+side}).up().ele({'FileName' : trackFileName}).up()
-                .ele('StreamFormat').ele({'Codec' : 'ADPCM'}).up().ele('Samples', { 'value': fileData.samples }).up().ele('SampleRate', { 'value': fileData.sample_rate }).up().ele('Headroom', { 'value': "-170" }).up().up()
-                .ele('Chunks').ele('Item').ele({'Type' : 'markers'}).up().ele('Markers').ele('Item')
-                .ele({'Name' : 'trackid'}).up().ele('Value', { 'value': fileData.trackid }).up().ele('SampleOffset', { 'value': '500' }).up()
-        } else if (side=='right') {
-            doc.ele('Item').ele({'Name' : track+'_'+side}).up().ele({'FileName' : trackFileName}).up()
-            .ele('StreamFormat').ele({'Codec' : 'ADPCM'}).up().ele('Samples', { 'value': fileData.samples }).up().ele('SampleRate', { 'value': fileData.sample_rate }).up().ele('Headroom', { 'value': "-170" }).up()
-        }
-    }
+    const chunksInfo = []
+    const streamFormatItem = {
+        Item: {
+            Type: 'streamformat',
+            BlockSize: '524288',
+        },
+    };
+    chunksInfo.push(streamFormatItem);
+
+    const dataItem = {
+        Item: {
+            Type: 'data',
+        },
+    };
+    chunksInfo.push(dataItem);
+
+    const seektableItem = {
+        Item: {
+            Type: 'seektable',
+        },
+    };
+    chunksInfo.push(seektableItem);
+
+    const trackInfo = []
     
+    const streamingSound = {
+        Item: {
+            Chunks: {
+                Item: chunksInfo.map(a => a.Item),
+            },
+        },
+    };
+    trackInfo.push(streamingSound);
+
+    const leftTrackData = {
+        Item: {
+            Name: fileData.track+'_left',
+            FileName: fileData.tracks['left'],
+            StreamFormat: {
+                Codec: 'ADPCM',
+                Samples: { '@value': fileData.samples },
+                SampleRate: { '@value': fileData.sample_rate },
+                Headroom: { '@value': "-170" },
+            },
+            Chunks: {
+                Item: {
+                    Type: 'markers',
+                    Markers: {
+                        Item: {
+                            Name: 'trackid',
+                            Value: { '@value': fileData.trackid },
+                            SampleOffset: { '@value': "500" },
+                        }
+                    }
+                },
+            }
+        },
+    };
+    trackInfo.push(leftTrackData);
+
+    const rightTrackData = {
+        Item: {
+            Name: fileData.track+'_right',
+            FileName: fileData.tracks['right'],
+            StreamFormat: {
+                Codec: 'ADPCM',
+                Samples: { '@value': fileData.samples },
+                SampleRate: { '@value': fileData.sample_rate },
+                Headroom: { '@value': "-170" },
+            }
+        },
+    };
+    trackInfo.push(rightTrackData);
+
+    const obj = {
+        AudioWaveContainer: {
+            Version: {
+                '@value': '1',
+            },
+            ChunkIndices: { '@value': 'True' },
+            MultiChannel: { '@value': 'True' },
+            Streams: {
+                Item: trackInfo.map(a => a.Item),
+            },
+            
+        }
+    };
+        
+    const doc = create(obj);
     const xml = doc.end({ prettyPrint: true });
-    fs.writeFile('./'+track+'.awc.xml', xml, err => {
+
+    fs.writeFile('./'+fileData.track+'.awc.xml', xml, err => {
         if (err) {
             console.error(err);
         }
@@ -50,7 +118,6 @@ async function construct54XML(trackData) {
             const simpleTrackName = value.track+'_'+channelKey+'_simple'
             simpleInfo['Item'].push(simpleTrackName)
         }
-        // const indTrack = []
         const streamingSound = {Item: {
                 '@type': 'StreamingSound',
                 Name: value.track+'_song',
@@ -156,11 +223,8 @@ async function construct151XML(trackData) {
     const trackInfo = []
     const simpleInfo = { Item: [] }
     for (const [key, value] of Object.entries(trackData)) {
-        
-        let simpleASDF = value.track+'_song'
-        let itemObj = {Hash0: {}, Hash1: simpleASDF}
+        const itemObj = {Hash0: {}, Hash1: value.track+'_song'}
         simpleInfo['Item'].push(itemObj)
-        // Item: trackInfo.map(a => a.Item),
     }
 
     const itemInfo = []

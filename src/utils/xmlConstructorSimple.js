@@ -71,7 +71,6 @@ async function constructAWCXMLSimple(trackData) {
             Item: {
                 Name: value.track,
                 FileName: value.tracks['left'],
-                // Chunks: simpleInfo,
                 Chunks: {
                     Item: simpleInfo.map(a => a.Item),
                 },
@@ -97,7 +96,6 @@ async function constructAWCXMLSimple(trackData) {
         
     const doc = create(obj);
     const xml = doc.end({ prettyPrint: true });
-    // console.log(xml)
     fs.writeFile('./audiodirectory/custom_sounds.awc.xml', xml, err => {
         if (err) {
             console.error(err);
