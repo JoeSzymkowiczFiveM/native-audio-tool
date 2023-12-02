@@ -5,6 +5,7 @@ ffmpeg.setFfmpegPath(ffmpegPath);
 var ffprobe = require('ffprobe')
 var ffprobeStatic = require('ffprobe-static');
 const fs = require('fs');
+const mm = require('music-metadata');
 const { constructAWCXML, construct54XML, construct151XML } = require('./utils/xmlConstructor.js')
 const { constructAWCXMLSimple, construct54XMLSimple } = require('./utils/xmlConstructorSimple.js')
 
@@ -30,6 +31,20 @@ const constructFileArray = async (fileList, initialTrackId, type) => {
         fileData.trackid = newTrackId
         // fileData.filename = file
         trackData[file] = fileData
+
+        if (type === 'radio') {
+            mm.parseFile(`./${file}`).then(metadata => {
+                fs.appendFile('./radioinfo.txt', `Track ID: ${fileData.trackid} | Title: ${metadata?.common?.title || 'Not Found'} | Artist: ${metadata?.common?.artist || 'Not Found'}\n`, (err) => {
+                    if (err) {
+                        console.log('An error occurred: ' + err.message);
+                    } else {
+                        console.log('Data appended to radioinfo.txt: ' + fileData.trackid);
+                    }
+                });
+            }).catch(err => {
+                console.log('An error occurred: ' + err.message);
+            })
+        }
 
         newTrackId++
     })
