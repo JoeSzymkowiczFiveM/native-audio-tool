@@ -6,7 +6,7 @@ async function constructAWCXML(fileData) {
     const streamFormatItem = {
         Item: {
             Type: 'streamformat',
-            BlockSize: '524288',
+            BlockSize: { '@value': "524288" },
         },
     };
     chunksInfo.push(streamFormatItem);
@@ -90,7 +90,7 @@ async function constructAWCXML(fileData) {
         }
     };
         
-    const doc = create(obj);
+    const doc = create({ encoding: "UTF-8" }, obj);
     const xml = doc.end({ prettyPrint: true });
 
     if (!fs.existsSync('audiodirectory')){
@@ -211,7 +211,7 @@ async function construct54XML(trackData) {
         
     const doc = create(obj);
     const xml = doc.end({ prettyPrint: true });
-    // console.log(xml)
+
     fs.writeFile('./data/dlccustomsongs_sound.dat54.rel.xml', xml, err => {
         if (err) {
             console.error(err);
@@ -297,7 +297,7 @@ async function construct151XML(trackData) {
         
     const doc = create(obj);
     const xml = doc.end({ prettyPrint: true });
-    // console.log(xml)
+
     fs.writeFile('./data/dlccustomsongs_game.dat151.rel.xml', xml, err => {
         if (err) {
             console.error(err);
