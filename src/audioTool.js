@@ -32,20 +32,6 @@ const constructFileArray = async (fileList, initialTrackId, type) => {
         // fileData.filename = file
         trackData[file] = fileData
 
-        if (type === 'radio') {
-            mm.parseFile(`./${file}`).then(metadata => {
-                fs.appendFile('./radioinfo.txt', `Track ID: ${fileData.trackid} | Title: ${metadata?.common?.title || 'Not Found'} | Artist: ${metadata?.common?.artist || 'Not Found'}\n`, (err) => {
-                    if (err) {
-                        console.log('An error occurred: ' + err.message);
-                    } else {
-                        console.log('Data appended to radioinfo.txt: ' + fileData.trackid);
-                    }
-                });
-            }).catch(err => {
-                console.log('An error occurred: ' + err.message);
-            })
-        }
-
         newTrackId++
     })
 }
@@ -104,12 +90,24 @@ const constructWav = async (track, filename, channel, sampleRate, type) => {
     })
 };
 
+const constructLogFile = (logOutput) => {
+    fs.appendFile('./radioinfo.txt', logOutput, (err) => {
+        if (err) {
+            console.log('An error occurred: ' + err.message);
+        } else {
+            console.log('Log output appended to radioinfo.txt');
+        }
+    });
+};
+
 const main = async () => {
+    let logOutput = '';
     let fileList = process.env.npm_config_file?.split(",");
     const folder = process.env.npm_config_folder;
     const sampleRate = process.env.npm_config_samplerate;
     const initialTrackId = process.env.npm_config_trackid;
     const generationType = process.env.npm_config_type;
+
     if (!fs.existsSync('./audiodirectory/')) {
         fs.mkdirSync('./audiodirectory/');
     };
@@ -131,9 +129,17 @@ const main = async () => {
             
             if (generationType === 'radio') {
                 await constructAWCXML(fileData);
+
+                mm.parseFile(`./${filename}`).then(metadata => {
+                    logOutput = logOutput + `['${fileData.trackid}'] = { '${metadata?.common?.title || 'Not Found'}', '${metadata?.common?.artist || 'Not Found'}' },\n`
+                }).catch(err => {
+                    console.log('An error occurred: ' + err.message);
+                })
             };
         }
-        console.log(trackData)
+
+        constructLogFile(logOutput);
+
         if (generationType === 'radio') {
             construct54XML(trackData);
             construct151XML(trackData);
