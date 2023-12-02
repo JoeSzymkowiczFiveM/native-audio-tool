@@ -5,13 +5,14 @@ ffmpeg.setFfmpegPath(ffmpegPath);
 var ffprobe = require('ffprobe')
 var ffprobeStatic = require('ffprobe-static');
 const fs = require('fs');
+const mm = require('music-metadata');
 const { constructAWCXML, construct54XML, construct151XML } = require('./utils/xmlConstructor.js')
 const { constructAWCXMLSimple, construct54XMLSimple } = require('./utils/xmlConstructorSimple.js')
 
 const trackData = []
 const constructFileArray = async (fileList, initialTrackId, type) => {
     let newTrackId = Number(initialTrackId)
-    fileList.forEach(file => {
+    fileList.forEach(async file => {
         let fileData = {}
         let tracks = []
         fileData.track = path.basename(file, '.mp3')
@@ -30,6 +31,19 @@ const constructFileArray = async (fileList, initialTrackId, type) => {
         fileData.trackid = newTrackId
         // fileData.filename = file
         trackData[file] = fileData
+
+        if (type === 'radio') {
+            const metadata = await mm.parseFile(`./${file}`);
+            
+            fs.appendFile('./radioinfo.txt', `Track ID: ${newTrackId} | Title: ${metadata?.common?.title || 'Not Found'} | Artist: ${metadata?.common?.artist || 'Not Found'}\n`, (err) => {
+                if (err) {
+                    console.log('An error occurred: ' + err.message);
+                } else {
+                    console.log('Data appended to radioinfo.txt successfully!');
+                }
+            });
+        }
+
         newTrackId++
     })
 }
@@ -43,10 +57,11 @@ const constructWav = async (track, filename, channel, sampleRate, type) => {
         }
         filepath = `${customSoundsDir}${track}_${channel}.wav`;
     } else if (type === 'radio') {
-        if (!fs.existsSync(track)) {
-            fs.mkdirSync(track);
+        const customMusicDir = `./audiodirectory/${track}/`
+        if (!fs.existsSync(customMusicDir)) {
+            fs.mkdirSync(customMusicDir);
         }
-        filepath = `./${track}/${track}_${channel}.wav`;
+        filepath = `${customMusicDir}${track}_${channel}.wav`;
     }
     const side = channel === 'left' ? '0.0.0' : '0.0.1';
     return new Promise((resolve, reject)=>{
