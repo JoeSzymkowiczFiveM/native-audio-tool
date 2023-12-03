@@ -93,11 +93,11 @@ async function constructAWCXML(fileData) {
     const doc = create({ encoding: "UTF-8" }, obj);
     const xml = doc.end({ prettyPrint: true });
 
-    if (!fs.existsSync('audiodirectory')){
-        fs.mkdirSync('audiodirectory');
+    if (!fs.existsSync('./output/audiodirectory')){
+        fs.mkdirSync('./output/audiodirectory');
     }
 
-    fs.writeFile('./audiodirectory/'+fileData.track+'.awc.xml', xml, err => {
+    fs.writeFile('./output/audiodirectory/'+fileData.track+'.awc.xml', xml, err => {
         if (err) {
             console.error(err);
         }
@@ -105,8 +105,8 @@ async function constructAWCXML(fileData) {
 }
 
 async function construct54XML(trackData) {
-    if (!fs.existsSync('data')){
-        fs.mkdirSync('data');
+    if (!fs.existsSync('./output/data')){
+        fs.mkdirSync('./output/data');
     }
 
     var containerPaths = { Item: [] };
@@ -212,7 +212,7 @@ async function construct54XML(trackData) {
     const doc = create(obj);
     const xml = doc.end({ prettyPrint: true });
 
-    fs.writeFile('./data/dlccustomsongs_sound.dat54.rel.xml', xml, err => {
+    fs.writeFile('./output/data/dlccustomsongs_sound.dat54.rel.xml', xml, err => {
         if (err) {
             console.error(err);
         }
@@ -220,8 +220,8 @@ async function construct54XML(trackData) {
 }
 
 async function construct151XML(trackData) {
-    if (!fs.existsSync('data')){
-        fs.mkdirSync('data');
+    if (!fs.existsSync('./output/data')){
+        fs.mkdirSync('./output/data');
     }
 
     const trackInfo = []
@@ -298,7 +298,7 @@ async function construct151XML(trackData) {
     const doc = create(obj);
     const xml = doc.end({ prettyPrint: true });
 
-    fs.writeFile('./data/dlccustomsongs_game.dat151.rel.xml', xml, err => {
+    fs.writeFile('./output/data/dlccustomsongs_game.dat151.rel.xml', xml, err => {
         if (err) {
             console.error(err);
         }

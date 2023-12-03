@@ -48,13 +48,13 @@ const constructFileArray = async (fileList, initialTrackId, type) => {
 const constructWav = async (track, filename, channel, sampleRate, type) => {
     let filepath;
     if (type === 'simple') {
-        const customSoundsDir = './audiodirectory/custom_sounds/';
+        const customSoundsDir = './output/audiodirectory/custom_sounds/';
         if (!fs.existsSync(customSoundsDir)) {
             fs.mkdirSync(customSoundsDir);
         }
         filepath = `${customSoundsDir}${track}_${channel}.wav`;
     } else if (type === 'radio') {
-        const customMusicDir = `./audiodirectory/${track}/`
+        const customMusicDir = `./output/audiodirectory/${track}/`
         if (!fs.existsSync(customMusicDir)) {
             fs.mkdirSync(customMusicDir);
         }
@@ -105,9 +105,13 @@ const main = async () => {
     const sampleRate = process.env.npm_config_samplerate;
     const initialTrackId = process.env.npm_config_trackid;
     const generationType = process.env.npm_config_type;
-    if (!fs.existsSync('./audiodirectory/')) {
-        fs.mkdirSync('./audiodirectory/');
+    if (!fs.existsSync('./output/')) {
+        fs.mkdirSync('./output/');
     };
+    
+    if (!fs.existsSync('./output/audiodirectory/')) {
+        fs.mkdirSync('./output/audiodirectory/');
+    }
 
     if (!fileList && folder) {
         fileList = [];
@@ -136,8 +140,8 @@ const main = async () => {
             constructAWCXMLSimple(trackData);
             construct54XMLSimple(trackData);
         }
-        if (!fs.existsSync('audiodirectory')){
-            fs.mkdirSync('audiodirectory');
+        if (!fs.existsSync('./output/audiodirectory')){
+            fs.mkdirSync('./output/audiodirectory');
         }
 
         await logger.writeLog();

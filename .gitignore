@@ -21,14 +21,10 @@ pids
 *.seed
 *.pid.lock
 
-/data
+/output
 *.mp3
 *.ogg
-*.awc
 *.wav
-*.dat54.rel.xml
-*.dat151.rel.xml
-*.awc.xml
 
 /out
 

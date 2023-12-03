@@ -2,13 +2,13 @@ const fs = require('fs');
 const { create } = require('xmlbuilder2');
 
 async function constructAWCXMLSimple(trackData) {
-    if (!fs.existsSync('data')) {
-        fs.mkdirSync('data');
+    if (!fs.existsSync('./output/data')) {
+        fs.mkdirSync('./output/data');
     }
 
     var containerPaths = { Item: [] };
     for (const [_, value] of Object.entries(trackData)) {
-        let containerPathsTrack = 'audiodirectory\\'+value.track
+        let containerPathsTrack = './output/\\'+value.track
         containerPaths['Item'].push(containerPathsTrack)
     }
 
@@ -104,8 +104,8 @@ async function constructAWCXMLSimple(trackData) {
 }
 
 async function construct54XMLSimple(trackData) {
-    if (!fs.existsSync('data')){
-        fs.mkdirSync('data');
+    if (!fs.existsSync('./output/data')){
+        fs.mkdirSync('./output/data');
     }
 
     var containerPaths = { Item: [] };
@@ -185,7 +185,7 @@ async function construct54XMLSimple(trackData) {
     const doc = create(obj);
     const xml = doc.end({ prettyPrint: true });
 
-    fs.writeFile('./data/audioexample_sounds.dat54.rel.xml', xml, err => {
+    fs.writeFile('./output/data/audioexample_sounds.dat54.rel.xml', xml, err => {
         if (err) {
             console.error(err);
         }
