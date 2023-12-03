@@ -184,7 +184,7 @@ async function construct54XMLSimple(trackData) {
 
     const doc = create(obj);
     const xml = doc.end({ prettyPrint: true });
-    // console.log(xml)
+
     fs.writeFile('./data/audioexample_sounds.dat54.rel.xml', xml, err => {
         if (err) {
             console.error(err);
@@ -192,5 +192,7 @@ async function construct54XMLSimple(trackData) {
     });
 }
 
-exports.constructAWCXMLSimple = constructAWCXMLSimple;
-exports.construct54XMLSimple  = construct54XMLSimple;
+module.exports = {
+    constructAWCXMLSimple,
+    construct54XMLSimple,
+}

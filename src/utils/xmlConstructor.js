@@ -305,6 +305,8 @@ async function construct151XML(trackData) {
     });
 }
 
-exports.construct54XML = construct54XML;
-exports.constructAWCXML = constructAWCXML;
-exports.construct151XML = construct151XML; 
+module.exports = { 
+    construct54XML, 
+    constructAWCXML, 
+    construct151XML 
+};
