@@ -96,7 +96,7 @@ async function constructAWCXMLSimple(trackData) {
         
     const doc = create(obj);
     const xml = doc.end({ prettyPrint: true });
-    fs.writeFile('./audiodirectory/custom_sounds.awc.xml', xml, err => {
+    fs.writeFile('./output/audiodirectory/custom_sounds.awc.xml', xml, err => {
         if (err) {
             console.error(err);
         }
