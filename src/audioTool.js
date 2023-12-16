@@ -8,6 +8,7 @@ const fs = require('fs');
 const mm = require('music-metadata');
 const { constructAWCXML, construct54XML, construct151XML } = require('./utils/xmlConstructor.js')
 const { constructAWCXMLSimple, construct54XMLSimple } = require('./utils/xmlConstructorSimple.js')
+const { constructAWCXMLWeapon, construct54XMLWeapon, construct151XMLWeapon } = require('./utils/xmlConstructorWeapon.js')
 const logger = require('./utils/logger.js')
 
 const trackData = []
@@ -49,6 +50,12 @@ const constructWav = async (track, filename, channel, sampleRate, type) => {
     let filepath;
     if (type === 'simple') {
         const customSoundsDir = './output/audiodirectory/custom_sounds/';
+        if (!fs.existsSync(customSoundsDir)) {
+            fs.mkdirSync(customSoundsDir);
+        }
+        filepath = `${customSoundsDir}${track}_${channel}.wav`;
+    } else if (type === 'weapon') {
+        const customSoundsDir = './output/audiodirectory/custom_weapon_sounds/';
         if (!fs.existsSync(customSoundsDir)) {
             fs.mkdirSync(customSoundsDir);
         }
@@ -105,6 +112,7 @@ const main = async () => {
     const sampleRate = process.env.npm_config_samplerate;
     const initialTrackId = process.env.npm_config_trackid;
     const generationType = process.env.npm_config_type;
+    const gun = process.env.npm_config_gun;
     if (!fs.existsSync('./output/')) {
         fs.mkdirSync('./output/');
     };
@@ -139,6 +147,10 @@ const main = async () => {
         } else if (generationType === 'simple') {
             constructAWCXMLSimple(trackData);
             construct54XMLSimple(trackData);
+        } else if (generationType === 'weapon') {
+            constructAWCXMLWeapon(trackData);
+            construct54XMLWeapon(trackData, gun);
+            construct151XMLWeapon(trackData, gun);
         }
         if (!fs.existsSync('./output/audiodirectory')){
             fs.mkdirSync('./output/audiodirectory');

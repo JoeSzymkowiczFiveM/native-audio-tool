@@ -6,7 +6,8 @@
      - `--samplerate` - The sample rate of the outputted files.
      - `--trackid` - The starting trackid that will be used for the processed tracks, used specifically for radio type.
      - `--soundset` - This is the soundset dict name used for playing sounds, used specifically for simple type.
-     - `--type` - This can be `simple` or `radio`, each outputting their respective audio data files.
+     - `--gun` - This is the name of the weapon you're generating the audio data for, used specifically for weapon type. NOTE: `sns` is the only working example right now. I will add more in the future.
+     - `--type` - This can be `simple`, `radio`, or `weapon`, each outputting their respective audio data files.
 
 
 ### 👀 Usage
