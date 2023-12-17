@@ -107,7 +107,7 @@ const constructWav = async (track, filename, channel, sampleRate, type) => {
 };
 
 const main = async () => {
-    let fileList = process.env.npm_config_file?.split(",");
+    const fileList = process.env.npm_config_file?.split(",");
     const folder = process.env.npm_config_folder;
     const sampleRate = process.env.npm_config_samplerate;
     const initialTrackId = process.env.npm_config_trackid;
@@ -120,16 +120,17 @@ const main = async () => {
     if (!fs.existsSync('./output/audiodirectory/')) {
         fs.mkdirSync('./output/audiodirectory/');
     }
-
+    let filteredFileList = [];
     if (!fileList && folder) {
-        fileList = [];
         fs.readdirSync(folder).forEach(file => {
-            fileList.push(`./${folder}/${file}`);
+            if (file.endsWith('.mp3')) {
+                filteredFileList.push(`./${folder}/${file}`);
+            }
         });
     }
     
     try {
-        await constructFileArray(fileList, initialTrackId, generationType)
+        await constructFileArray(filteredFileList, initialTrackId, generationType)
         for (const [filename, fileData] of Object.entries(trackData)) {
             const tracks = fileData['tracks'];
             for (const [side, track] of Object.entries(tracks)) {

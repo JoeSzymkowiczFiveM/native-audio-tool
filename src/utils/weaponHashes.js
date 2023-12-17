@@ -1,8 +1,9 @@
 const hashData  = {
     ['sns'] : { 
         // Name : name,
-        Flags : { '@value': '0xAAAAAA00' },
-        Flags : { '@value': '2' },
+        '@ntOffset': '5932',
+        Flags : { '@value': '0xAAAAA800' },
+        Version : { '@value': '3' },
         // PlayerFire : playerFire,
         SuppressedFire : 'hash_71A29FA0',
         RapidFire : 'silence',
@@ -54,20 +55,38 @@ const hashData  = {
         Unk48 : { '@value': '0' },
         Unk49 : { '@value': '0' },
         Unk50 : { '@value': '0' },
+        Unk51 : 'ptl_sns_player_super_slow_mo_vb',
+        Unk52 : 'hash_5F44A68C',
+        Unk53 : 'ptl_suppressed_player_super_slow_mo_vb',
+        Unk54 : 'hash_5F44A68C',
+        Unk55 : 'null_sound',
+        Unk56 : 'null_sound',
+        Unk57 : 'null_sound',
+        Unk58 : 'null_sound',
+        Unk59 : 'null_sound',
+        Unk60 : 'null_sound',
+        Unk61 : 'null_sound',
+        Unk62 : 'null_sound',
+        Unk63 : { '@value': '10' },
+        Unk64 : { '@value': '10' },
+        Unk65 : { '@value': '9999' },
+        Unk66 : { '@value': '9999' },
+        Unk67 : { '@value': '9999' },
     }
 }
 
 const generate54Data  = {
-    ['sns'] : ['ptl_sns_player_mech_env', 'ptl_sns_player_sub']
+    ['sns'] : ['ptl_sns_player_mech_env', 'ptl_sns_player_sub'],
 }
 
 async function buildWeapons151(type, name, playerFire, u23) {
-    const weaponData = { 
-        ...hashData[type], 
+    const weaponData = {Item : {
+        '@type' : 'Weapon', 
         Name : name,
         PlayerFire : playerFire,
         Unk23 : u23,
-    }
+        ...hashData[type]
+    }}
     return weaponData
 }
 

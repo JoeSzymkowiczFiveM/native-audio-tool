@@ -250,9 +250,7 @@ async function construct151XMLWeapon(trackData, gun) {
         itemInfo.push(info1)
 
         const weaponData = await buildWeapons151(gun, name, playerFire, u23)
-        console.log(weaponData)
-        const info2 = {Item: weaponData}
-        itemInfo.push(info2)
+        itemInfo.push(weaponData)
         
         const obj = {
             Dat151: {
