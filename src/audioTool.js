@@ -32,7 +32,6 @@ const constructFileArray = async (fileList, initialTrackId, type) => {
         });
         fileData.tracks = tracks
         fileData.trackid = newTrackId
-        // fileData.filename = file
         trackData[file] = fileData
 
         mm.parseFile(`./${file}`).then(metadata => {
@@ -46,10 +45,10 @@ const constructFileArray = async (fileList, initialTrackId, type) => {
     })
 }
 
-const constructWav = async (track, filename, channel, sampleRate, type) => {
+const constructWav = async (track, filename, channel, sampleRate, type, audioBankName) => {
     let filepath;
     if (type === 'simple') {
-        const customSoundsDir = './output/audiodirectory/custom_sounds/';
+        const customSoundsDir = `./output/audiodirectory/${audioBankName}/`;
         if (!fs.existsSync(customSoundsDir)) {
             fs.mkdirSync(customSoundsDir);
         }
@@ -113,6 +112,8 @@ const main = async () => {
     const initialTrackId = process.env.npm_config_trackid;
     const generationType = process.env.npm_config_type;
     const gun = process.env.npm_config_gun;
+    const audioBankName = process.env.npm_config_audiobank != null ? process.env.npm_config_audiobank : 'custom_sounds';
+
     if (!fs.existsSync('./output/')) {
         fs.mkdirSync('./output/');
     };
@@ -134,7 +135,7 @@ const main = async () => {
         for (const [filename, fileData] of Object.entries(trackData)) {
             const tracks = fileData['tracks'];
             for (const [side, track] of Object.entries(tracks)) {
-                await constructWav(fileData.track, filename, side, sampleRate, generationType);
+                await constructWav(fileData.track, filename, side, sampleRate, generationType, audioBankName);
             };
             
             if (generationType === 'radio') {
@@ -146,8 +147,8 @@ const main = async () => {
             construct54XML(trackData);
             construct151XML(trackData);
         } else if (generationType === 'simple') {
-            constructAWCXMLSimple(trackData);
-            construct54XMLSimple(trackData);
+            constructAWCXMLSimple(trackData, audioBankName);
+            construct54XMLSimple(trackData, audioBankName);
         } else if (generationType === 'weapon') {
             constructAWCXMLWeapon(trackData);
             construct54XMLWeapon(trackData, gun);

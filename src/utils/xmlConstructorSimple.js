@@ -1,7 +1,7 @@
 const fs = require('fs');
 const { create } = require('xmlbuilder2');
 
-async function constructAWCXMLSimple(trackData) {
+async function constructAWCXMLSimple(trackData, audioBankName) {
     if (!fs.existsSync('./output/data')) {
         fs.mkdirSync('./output/data');
     }
@@ -96,14 +96,14 @@ async function constructAWCXMLSimple(trackData) {
         
     const doc = create(obj);
     const xml = doc.end({ prettyPrint: true });
-    fs.writeFile('./output/audiodirectory/custom_sounds.awc.xml', xml, err => {
+    fs.writeFile(`./output/audiodirectory/${audioBankName}.awc.xml`, xml, err => {
         if (err) {
             console.error(err);
         }
     });
 }
 
-async function construct54XMLSimple(trackData) {
+async function construct54XMLSimple(trackData, audioBankName) {
     if (!fs.existsSync('./output/data')){
         fs.mkdirSync('./output/data');
     }
@@ -129,7 +129,7 @@ async function construct54XMLSimple(trackData) {
                     },
                     Category: "scripted",
                 },
-                ContainerName: 'audiodirectory/custom_sounds',
+                ContainerName: `audiodirectory/${audioBankName}`,
                 FileName: value.track,
                 WaveSlotNum: {
                     '@value': '0',
@@ -173,7 +173,7 @@ async function construct54XMLSimple(trackData) {
                 '@value': '7314721',
             },
             ContainerPaths: {
-                Item: 'audiodirectory\\custom_sounds',
+                Item: `audiodirectory\\${audioBankName}`,
             },
             Items: {
                 Item: trackInfo.map(a => a.Item),
