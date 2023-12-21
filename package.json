@@ -2,8 +2,7 @@
   "name": "native-audio-tool",
   "version": "1.1.0",
   "scripts": {
-    "makeWavs": "node ./src/audioTool.js",
-    "convert": "node ./src/convert.js"
+    "makeWavs": "node ./src/audioTool.js"
   },
   "author": "JoeSzymkowiczFivem, darktrovx, pushkart2",
   "license": "ISC",
