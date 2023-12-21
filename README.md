@@ -1,4 +1,14 @@
-# native-audio-tool
+![image](https://github.com/JoeSzymkowiczFiveM/native-audio-tool/assets/70592880/4c55bd11-6e5e-4f72-9957-5695f4f3fd85)
+
+## Description
+This automates the SimpleAudio process outlined in [this repo](https://github.com/ChatDisabled/nativeAudio) from @ChatDisabled, which also includes a sample resource with usage. In addition, the script also prepares the radio station and track data to be used with Chat's [Custom Native Radio Stations](https://forum.cfx.re/t/custom-native-radio-stations/5158461) resource.
+
+## Basics
+* Converts MP3s, WAVs, and OGG to properly formatted WAVs for OpenIV conversion
+* Prepares the necessary XMLs for OpenIV conversion
+
+
+## Usage
 1. Run `npm install`
 2. In the terminal `npm run makeWavs` with the following parameters
      - `--file` - comma separated list of files, with the extension that will be processed. The script only uses MP3s.
@@ -11,7 +21,7 @@
      - `--type` - This can be `simple`, `radio`, or `weapon`, each outputting their respective audio data files.
 
 
-### 👀 Usage
+### 👀 Commands
 `npm run makeWavs --file=lock.mp3 --samplerate=48000 --trackid=5000 --type=radio`
 
 `npm run makeWavs --file=lock.mp3 --samplerate=48000 --trackid=5000 --type=radio`
@@ -22,10 +32,11 @@
 
 `npm run makeWavs --samplerate=32000 --soundset=special_soundset --type=simple --folder=test --audiobank=joe_sounds`
 
-## .ogg Conversion Script
 
-Since .ogg files are now supported in the main generation script, I have removed the .ogg specific script.
+### Dependencies
+[nodeJS](https://nodejs.org/en/)
 
+[CodeWalker](https://github.com/dexyfex/CodeWalker) the outputted WAV and XML data is imported into CodeWalker, to create the AWC and REL information
 
 ## Discord
 [Joe Szymkowicz FiveM Development](https://discord.gg/5vPGxyCB4z)
