@@ -1,5 +1,4 @@
 const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
-const path = require('path');
 const ffmpeg = require('fluent-ffmpeg');
 ffmpeg.setFfmpegPath(ffmpegPath);
 var ffprobe = require('ffprobe')
@@ -10,6 +9,7 @@ const { constructAWCXML, construct54XML, construct151XML } = require('./utils/xm
 const { constructAWCXMLSimple, construct54XMLSimple } = require('./utils/xmlConstructorSimple')
 const { constructAWCXMLWeapon, construct54XMLWeapon, construct151XMLWeapon } = require('./utils/xmlConstructorWeapon')
 const logger = require('./utils/logger')
+const fileUtil = require('./utils/fileUtil')
 
 const trackData = []
 
@@ -17,8 +17,10 @@ const constructFileArray = async (fileList, initialTrackId, type) => {
     let newTrackId = Number(initialTrackId)
     fileList.forEach(async file => {
         let fileData = {}
+        fileData.trackid = newTrackId
         let tracks = []
-        fileData.track = path.basename(file, '.mp3')
+        fileData.extension = fileUtil.getFileExtension(file)
+        fileData.track = fileUtil.getBaseFilename(file, '.'+fileData.extension)
         const sides = ['left']
         if (type === 'radio') {
             sides.push('right')
@@ -31,7 +33,6 @@ const constructFileArray = async (fileList, initialTrackId, type) => {
             }
         });
         fileData.tracks = tracks
-        fileData.trackid = newTrackId
         trackData[file] = fileData
 
         mm.parseFile(`./${file}`).then(metadata => {
@@ -45,7 +46,7 @@ const constructFileArray = async (fileList, initialTrackId, type) => {
     })
 }
 
-const constructWav = async (track, filename, channel, sampleRate, type, audioBankName) => {
+const constructWav = async (track, filename, channel, sampleRate, type, audioBankName, extension) => {
     let filepath;
     if (type === 'simple') {
         const customSoundsDir = `./output/audiodirectory/${audioBankName}/`;
@@ -70,7 +71,7 @@ const constructWav = async (track, filename, channel, sampleRate, type, audioBan
     return new Promise((resolve, reject)=>{
         let ff = ffmpeg()
         ff.input(filename)
-        ff.inputFormat('mp3')
+        ff.inputFormat(extension)
         ff.outputOption('-map_channel ' + side)
         ff.audioChannels(1)
         ff.outputOption('-map_metadata -1')
@@ -135,7 +136,7 @@ const main = async () => {
         for (const [filename, fileData] of Object.entries(trackData)) {
             const tracks = fileData['tracks'];
             for (const [side, track] of Object.entries(tracks)) {
-                await constructWav(fileData.track, filename, side, sampleRate, generationType, audioBankName);
+                await constructWav(fileData.track, filename, side, sampleRate, generationType, audioBankName, fileData.extension);
             };
             
             if (generationType === 'radio') {

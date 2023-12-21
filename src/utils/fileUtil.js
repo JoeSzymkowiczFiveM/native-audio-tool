@@ -1,8 +1,7 @@
 const path = require('path');
-
 const allowedExtensions = ['ogg', 'mp3'];
 
-async function getFileExtension(file) {
+function getFileExtension(file) {
     const extension = file.split('.').pop()
     if (!allowedExtensions.includes(extension)) {
         return false;
@@ -10,8 +9,9 @@ async function getFileExtension(file) {
     return extension;
 }
 
-async function getBaseFilename(file, ext) {
-    return baseFilename = path.basename(file, ext);
+function getBaseFilename(file, ext) {
+    const asdf = path.basename(file, ext);
+    return asdf
 }
 
 module.exports = { 
