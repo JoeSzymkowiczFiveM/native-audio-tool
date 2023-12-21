@@ -20,6 +20,11 @@ const constructFileArray = async (fileList, initialTrackId, type) => {
         fileData.trackid = newTrackId
         let tracks = []
         fileData.extension = fileUtil.getFileExtension(file)
+        if (!fileData.extension) {
+            const metaLog = `File ${file} does not have a valid extension.`
+            logger.addToLog(metaLog)
+            return
+        }
         fileData.track = fileUtil.getBaseFilename(file, '.'+fileData.extension)
         const sides = ['left']
         if (type === 'radio') {
@@ -131,6 +136,7 @@ const main = async () => {
     
     try {
         await constructFileArray(filteredFileList, initialTrackId, generationType)
+        console.log(trackData)
         for (const [filename, fileData] of Object.entries(trackData)) {
             const tracks = fileData['tracks'];
             for (const [side, track] of Object.entries(tracks)) {
