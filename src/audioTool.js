@@ -6,10 +6,10 @@ var ffprobe = require('ffprobe')
 var ffprobeStatic = require('ffprobe-static');
 const fs = require('fs');
 const mm = require('music-metadata');
-const { constructAWCXML, construct54XML, construct151XML } = require('./utils/xmlConstructor.js')
-const { constructAWCXMLSimple, construct54XMLSimple } = require('./utils/xmlConstructorSimple.js')
-const { constructAWCXMLWeapon, construct54XMLWeapon, construct151XMLWeapon } = require('./utils/xmlConstructorWeapon.js')
-const logger = require('./utils/logger.js')
+const { constructAWCXML, construct54XML, construct151XML } = require('./utils/xmlConstructor')
+const { constructAWCXMLSimple, construct54XMLSimple } = require('./utils/xmlConstructorSimple')
+const { constructAWCXMLWeapon, construct54XMLWeapon, construct151XMLWeapon } = require('./utils/xmlConstructorWeapon')
+const logger = require('./utils/logger')
 
 const trackData = []
 
