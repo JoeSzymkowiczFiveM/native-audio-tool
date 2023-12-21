@@ -24,11 +24,7 @@
 
 ## .ogg Conversion Script
 
-I included a small script to convert OGG files to MP3, to be used as input for the audio tool. Please create a `convert` folder and place the .ogg files you want converted inside. Then in the terminal, run the following script. Converted files will be placed in the `convert` folder.
-
-
-### 👀 Usage
-`npm run convert`
+Since .ogg files are now supported in the main generation script, I have removed the .ogg specific script.
 
 
 ## Discord

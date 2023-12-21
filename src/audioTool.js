@@ -125,9 +125,7 @@ const main = async () => {
     let filteredFileList = [];
     if (!fileList && folder) {
         fs.readdirSync(folder).forEach(file => {
-            if (file.endsWith('.mp3')) {
-                filteredFileList.push(`./${folder}/${file}`);
-            }
+            filteredFileList.push(`./${folder}/${file}`);
         });
     }
     
