@@ -132,11 +132,12 @@ const main = async () => {
         fs.readdirSync(folder).forEach(file => {
             filteredFileList.push(`./${folder}/${file}`);
         });
+    } else if (fileList && !folder) {
+        filteredFileList = fileList
     }
     
     try {
         await constructFileArray(filteredFileList, initialTrackId, generationType)
-        console.log(trackData)
         for (const [filename, fileData] of Object.entries(trackData)) {
             const tracks = fileData['tracks'];
             for (const [side, track] of Object.entries(tracks)) {

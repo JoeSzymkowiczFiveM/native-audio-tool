@@ -4,7 +4,7 @@
 This automates the SimpleAudio process outlined in [this repo](https://github.com/ChatDisabled/nativeAudio) from @ChatDisabled, which also includes a sample resource with usage. In addition, the script also prepares the radio station and track data to be used with Chat's [Custom Native Radio Stations](https://forum.cfx.re/t/custom-native-radio-stations/5158461) resource.
 
 ## Basics
-* Converts MP3s, WAVs, and OGG to properly formatted WAVs for OpenIV conversion
+* Converts MP3s, WAVs, and OGG files to properly formatted WAVs for OpenIV conversion
 * Prepares the necessary XMLs for OpenIV conversion
 
 
