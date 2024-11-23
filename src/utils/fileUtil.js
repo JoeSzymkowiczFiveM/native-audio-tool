@@ -1,5 +1,5 @@
 const path = require('path');
-const allowedExtensions = ['ogg', 'mp3'];
+const allowedExtensions = ['ogg', 'mp3', 'wav'];
 
 function getFileExtension(file) {
     const extension = file.split('.').pop()
