@@ -1,20 +1,17 @@
-const path = require('path');
-const allowedExtensions = ['ogg', 'mp3', 'wav'];
+const path = require("path");
+
+const allowedExtensions = new Set(["ogg", "mp3", "wav"]);
 
 function getFileExtension(file) {
-    const extension = file.split('.').pop()
-    if (!allowedExtensions.includes(extension)) {
-        return false;
-    }
-    return extension;
+  const extension = path.extname(file).replace(".", "").toLowerCase();
+  return allowedExtensions.has(extension) ? extension : false;
 }
 
-function getBaseFilename(file, ext) {
-    const asdf = path.basename(file, ext);
-    return asdf
+function getBaseFilename(file, extension) {
+  return path.basename(file, extension);
 }
 
-module.exports = { 
-    getFileExtension, 
-    getBaseFilename
+module.exports = {
+  getFileExtension,
+  getBaseFilename,
 };
