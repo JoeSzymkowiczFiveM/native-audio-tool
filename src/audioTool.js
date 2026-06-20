@@ -339,8 +339,14 @@ function writeGeneratedFxmanifest(
 
   if (config.generationType === "simple") {
     lines.push(
+      "-- Request the audio bank before playing sounds:",
+      `-- while not RequestScriptAudioBank(${luaQuote(`audiodirectory/${config.audioBankName}`)}, false) do Wait(0) end`,
+      "--",
       "-- Play simple sounds with:",
       `-- PlaySoundFrontend(GetSoundId(), <scriptName>, ${luaQuote(config.soundSetName)}, true)`,
+      "--",
+      "-- Release the audio bank when you are done:",
+      `-- ReleaseNamedScriptAudioBank(${luaQuote(`audiodirectory/${config.audioBankName}`)})`,
       "--",
       "-- Generated script names:",
     );
@@ -375,6 +381,17 @@ function writeGeneratedFxmanifest(
   const fxmanifestPath = path.join("output", "fxmanifest.lua");
   fs.writeFileSync(fxmanifestPath, lines.join("\n"));
   return fxmanifestPath;
+}
+
+function cleanupIntermediateWavs(config) {
+  if (config.generationType !== "simple") return;
+
+  const wavDirectory = path.join(
+    "output",
+    "audiodirectory",
+    config.audioBankName,
+  );
+  fs.rmSync(wavDirectory, { recursive: true, force: true });
 }
 
 async function main() {
@@ -418,6 +435,8 @@ async function main() {
       generatedRels,
     );
     console.log("Generated ", generatedFxmanifest);
+
+    cleanupIntermediateWavs(config);
 
     await logger.writeLog();
   } catch (err) {

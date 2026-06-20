@@ -60,7 +60,7 @@ bun run makeSounds -- --file=lock.mp3,unlock.ogg --samplerate=32000 --soundset=s
 Generate a simple audio bank from a folder with a custom audio bank name:
 
 ```sh
-bun run makeSounds -- --folder=input --samplerate=32000 --soundset=special_soundset --audiobank=joe_sounds --codec=pcm
+bun run makeSounds -- --folder=input --samplerate=32000 --soundset=js5m_soundset --audiobank=js5m_audiobank --codec=adpcm
 ```
 
 Generate radio resources:
@@ -74,7 +74,7 @@ bun run makeRadio -- --file=track01.mp3,track02.mp3 --samplerate=48000 --trackid
 Generated files are written under `output/`:
 
 - `output/audiodirectory/<audiobank>.awc` for `simple` audio.
-- `output/audiodirectory/<audiobank>/*.wav` for generated `simple` WAV files.
+- Simple-audio WAV files are generated temporarily under `output/audiodirectory/<audiobank>/` and removed after the `.awc` is written.
 - `output/audiodirectory/<track>.awc` for each `radio` track.
 - `output/audiodirectory/<track>/*.wav` for generated `radio` WAV files.
 - `output/data/*.dat54.rel` binary sound metadata for `simple` and `radio` audio.
